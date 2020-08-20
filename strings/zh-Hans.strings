@@ -1,0 +1,57 @@
+"MY_DAYS" = "MyDays倒数日";
+
+"ALERT_INFO" = "提示";
+"OK" = "好";
+"CANCEL" = "取消";
+"BACK" = "返回";
+"SUCCESS" = "成功";
+"ERROR" = "失败";
+"NONE" = "什么都没有";
+
+"HOME" = "首页";
+
+"TITLE" = "标题";
+"DESCRIBE" = "描述";
+"DATE" = "日期";
+"CHOOSE_DATE" = "选择日期";
+"DAY" = "天";
+"LESS_THAN_A_DAY" = "还有不到一天";
+"DAYS_LEFT" = "还有";
+"DAYS_PASS" = "过了";
+"LIST_END" = "已经到底啦~";
+
+"SETTING" = "设置";
+
+"GENERAL" = "一般";
+"DELETE_CONFIRM" = "删除前确认";
+"TODAY_MODE" = "Today样式";
+"MYDAYS_TOP" = "置顶";
+"MYDAYS_LIST" = "列表";
+
+
+"BACKUP" = "备份";
+"AUTO_BACKUP_ICLOUD" = "自动备份到iCloud";
+"BACKUP_ICLOUD" = "备份到iCloud";
+"RECOVER_ICLOUD" = "从iCloud恢复";
+"ALREADY_HAS_BACKUP" = "已有备份，是否覆盖？";
+"BACKUP_SUCCESS" = "备份成功";
+"BACKUP_ERROR" = "备份失败";
+"RECOVER" = "恢复";
+"RECOVER_SUCCESS" = "恢复成功";
+"RECOVER_ERROR" = "恢复失败";
+
+"ADVANCED" = "高级";
+
+"ABOUT" = "关于";
+"VERSION" = "Version";
+"AUTHOR" = "作者";
+
+"SAVE" = "保存";
+"SAVE_SUCCESS" = "保存成功";
+"SAVE_ERROR" = "保存失败";
+"DELETE" = "删除";
+"CONFIRM_DELETE_MSG" = "确认要删除吗？";
+"DELETE_SUCCESS" = "删除成功";
+"DELETE_ERROR" = "删除失败";
+
+"EDIT" = "编辑";

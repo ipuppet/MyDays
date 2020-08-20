@@ -1,0 +1,69 @@
+"STRONG_PASSWORD" = "Strong Password Generateor";
+
+"ALERT_INFO" = "Information";
+"OK" = "OK";
+"CANCEL" = "Cancel";
+"BACK" = "Back";
+
+"SETTING" = "SETTING";
+
+"GENERAL" = "General";
+"AUTO_COPY" = "Auto Copy";
+"DELETE_CONFIRM" = "Confirm before deleting.";
+
+"KEYBOARD" = "Keyboard";
+"COPY_ACCOUNT" = "Copy Account";
+"INSERT_ACCOUNT" = "Insert Account";
+"IF_SAVE_THIS_PASSWORD" = "Do you want to save the password? Account and website will be automatically set to'AUTO-SAVE'";
+
+"BACKUP" = "Backup";
+"AUTO_BACKUP_ICLOUD" = "Automatic backup to iCloud";
+"BACKUP_ICLOUD" = "Backup to iCloud";
+"RECOVER_ICLOUD" = "Recover from iCloud";
+"ALREADY_HAS_BACKUP" = "There is a backup, do you want to overwrite it?";
+"BACKUP_SUCCESS" = "Successful backup";
+"BACKUP_ERROR" = "Backup failed";
+"RECOVER" = "Recover";
+"WHICH_FILE_TO_RECOVER_FROM" = "Which file to recover from?";
+"RECOVER_SUCCESS" = "Successful recovery";
+"RECOVER_ERROR" = "Recovery failed";
+
+"ADVANCED" = "Advanced";
+"GENERATOR_PART" = "Part";
+"GENERATOR_LENGTH" = "Length";
+"GENERATOR_CONNECTOR" = "Connector";
+"GENERATOR_CHARACTER_SET" = "Character Set";
+
+"ABOUT" = "About";
+"VERSION" = "Version";
+"AUTHOR" = "Author";
+
+"ACCOUNT" = "Account";
+"PASSWORD" = "Password";
+"WEBSITE" = "Website";
+
+"CLICK_TO_COPY" = "Click To Copy";
+"GENERATE_BUTTON" = "Generate Password";
+"COPY" = "Copy";
+"COPY_SUCCESS" = "Copied";
+"NO_PASSWORD" = "Password is empty.";
+"PASSWORD_HAS_GENERATED" = "There is a password, do you want to regenerate it?";
+
+"SAVE" = "Save";
+"SAVE_SUCCESS" = "Saved successfully.";
+"SAVE_ERROR" = "Save failed.";
+"DELETE" = "Delete";
+"CONFIRM_DELETE_MSG" = "Are you sure you want to delete?";
+"DELETE_SUCCESS" = "Delete successfully.";
+"DELETE_ERROR" = "Delete failed.";
+
+"ADD_PASSWORD" = "Add a password";
+"EDIT" = "Edit";
+
+"STORAGE" = "Storage";
+"PASSWORD_STORAGE" = "Saved Password";
+"STORAGE_SEARCH" = "Search";
+"NO_RESULT" = "No result";
+"LIST_END" = "end.";
+
+"UNDO" = "Undo";

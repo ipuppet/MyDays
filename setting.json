@@ -1,0 +1,72 @@
+[
+    {
+        "title": "GENERAL",
+        "items": [
+            {
+                "title": "DELETE_CONFIRM",
+                "type": "switch",
+                "key": "setting.general.delete_confirm",
+                "value": true
+            },
+            {
+                "title": "TODAY_MODE",
+                "type": "tab",
+                "key": "setting.general.today_mode",
+                "items": [
+                    "MYDAYS_TOP",
+                    "MYDAYS_LIST"
+                ],
+                "value": 0
+            }
+        ]
+    },
+    {
+        "title": "BACKUP",
+        "items": [
+            {
+                "title": "AUTO_BACKUP_ICLOUD",
+                "type": "switch",
+                "key": "setting.backup.auto_backup",
+                "value": true
+            },
+            {
+                "title": "BACKUP_ICLOUD",
+                "type": "script",
+                "key": "setting.backup.backup",
+                "value": "this.backup_to_iCloud()"
+            },
+            {
+                "title": "RECOVER_ICLOUD",
+                "type": "script",
+                "key": "setting.backup.recover",
+                "value": "this.recover_from_iCloud()"
+            }
+        ]
+    },
+    {
+        "title": "ABOUT",
+        "items": [
+            {
+                "title": "Github",
+                "type": "info",
+                "key": "setting.about.github",
+                "value": "https://github.com/ipuppet/MyDays"
+            },
+            {
+                "title": "AUTHOR",
+                "type": "info",
+                "key": "setting.about.author",
+                "value": [
+                    "ipuppet",
+                    "https://blog.ipuppet.cn"
+                ]
+            },
+            {
+                "title": "README",
+                "type": "script",
+                "key": "setting.about.readme",
+                "value": "this.readme()"
+            }
+        ]
+    }
+]
