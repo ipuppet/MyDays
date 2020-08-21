@@ -5,13 +5,18 @@ class HomeUI {
         this.kernel = kernel
         this.factory = factory
         this.editor = new EditorUI(this.kernel, this.factory)
-        if (!$cache.get("myday_top")) {
-            $cache.set("myday_top", HomeUI.template(this.kernel.storage.all()[0]))
-        }
     }
 
     static update(data) {
-        $("mydays").data = HomeUI.to_template(data)
+        $("mydays").data = HomeUI.template_list(data)
+    }
+
+    static update_top(data) {
+        $cache.set("myday_top", data)
+        let template = HomeUI.template(data)
+        $("myday_top_title").props = template.title
+        $("myday_top_describe").props = template.describe
+        $("myday_top_date").props = template.date
     }
 
     static date_span(date) {
@@ -36,6 +41,10 @@ class HomeUI {
         }
     }
 
+    /**
+     * 将数据转换为模板需要的格式
+     * @param {*} data 
+     */
     static template(data) {
         if (!data) return
         let date = HomeUI.date_span(data.date)
@@ -52,14 +61,13 @@ class HomeUI {
                 font: $font(data.style.describe.font[0], data.style.describe.font[1])
             },
             date: {
-                text: date.text,
-                textColor: $color(data.style.date.color[date.color]),
-                font: $font(data.style.date.font[0], data.style.date.font[1])
+                title: date.text,
+                bgcolor: $color(data.style.date.color[date.color])
             }
         }
     }
 
-    static to_template(data) {
+    static template_list(data) {
         let result = []
         for (let myday of data) {
             result.push(HomeUI.template(myday))
@@ -67,7 +75,20 @@ class HomeUI {
         return result
     }
 
+    static template_top() {
+        let data = {}
+        if ($cache.get("myday_top")) {
+            try {
+                data = HomeUI.template($cache.get("myday_top"))
+            } catch (error) {
+                setTimeout(() => { $ui.toast($l10n("RESER_TOP")) }, 1000)
+            }
+        }
+        return data
+    }
+
     get_views() {
+        let myday_top = HomeUI.template_top()
         return [
             {
                 type: "view",
@@ -135,8 +156,7 @@ class HomeUI {
                 views: [
                     {
                         type: "label",
-                        props: Object.assign({ id: "myday_top_title" },
-                            $cache.get("myday_top") ? $cache.get("myday_top").title : {}),
+                        props: Object.assign({ id: "myday_top_title" }, myday_top.title),
                         layout: (make) => {
                             make.top.inset(0)
                             make.left.inset(20)
@@ -145,8 +165,7 @@ class HomeUI {
                     },
                     {
                         type: "label",
-                        props: Object.assign({ id: "myday_top_describe" },
-                            $cache.get("myday_top") ? $cache.get("myday_top").describe : {}),
+                        props: Object.assign({ id: "myday_top_describe" }, myday_top.describe),
                         layout: (make, view) => {
                             make.bottom.inset(20)
                             make.left.equalTo(view.prev)
@@ -154,9 +173,12 @@ class HomeUI {
                         }
                     },
                     {
-                        type: "label",
-                        props: Object.assign({ id: "myday_top_date" },
-                            $cache.get("myday_top") ? $cache.get("myday_top").date : {}),
+                        type: "button",
+                        props: Object.assign({
+                            id: "myday_top_date",
+                            font: $font(14),
+                            contentEdgeInsets: 5
+                        }, myday_top.date),
                         layout: make => {
                             make.top.inset(25)
                             make.right.inset(20)
@@ -167,7 +189,7 @@ class HomeUI {
             {
                 type: "list",
                 props: {
-                    data: HomeUI.to_template(this.kernel.storage.all()),
+                    data: HomeUI.template_list(this.kernel.storage.all()),
                     id: "mydays",
                     indicatorInsets: $insets(0, 0, 50, 0),
                     header: {
@@ -215,15 +237,10 @@ class HomeUI {
                     },
                     rowHeight: 80,
                     template: {
-                        props: {},
                         views: [
                             {
                                 type: "label",
-                                props: { id: "info" },
-                                layout: (make) => {
-                                    make.top.inset(10)
-                                    make.left.inset(20)
-                                }
+                                props: { id: "info", hidden: true }
                             },
                             {
                                 type: "label",
@@ -242,8 +259,12 @@ class HomeUI {
                                 }
                             },
                             {
-                                type: "label",
-                                props: { id: "date" },
+                                type: "button",
+                                props: {
+                                    id: "date",
+                                    font: $font(14),
+                                    contentEdgeInsets: 5
+                                },
                                 layout: (make, view) => {
                                     make.centerY.equalTo(view.super)
                                     make.right.inset(20)
@@ -284,18 +305,19 @@ class HomeUI {
                             color: $color("orange"),
                             handler: (sender, indexPath) => {
                                 let data = sender.object(indexPath).info
-                                let date = sender.object(indexPath).date
-                                $cache.set("myday_top", HomeUI.template(data))
-                                $("myday_top_title").text = data.title
-                                $("myday_top_describe").text = data.describe
-                                $("myday_top_date").props = date
+                                HomeUI.update_top(data)
                             }
                         }
                     ]
                 },
                 events: {
                     didSelect: (sender, indexPath, data) => {
-                        this.editor.push(data.info, () => { HomeUI.update(this.kernel.storage.all()) })
+                        this.editor.push(data.info, () => {
+                            HomeUI.update(this.kernel.storage.all())
+                            if (data.info.id === $cache.get("myday_top").id) {
+                                HomeUI.update_top(data.info)
+                            }
+                        })
                     }
                 },
                 layout: (make, view) => {

@@ -19,6 +19,17 @@
 "DAYS_LEFT" = "还有";
 "DAYS_PASS" = "过了";
 "LIST_END" = "已经到底啦~";
+"RESET_TOP" = "可能需要重新设置'置顶'";
+
+"SAVE" = "保存";
+"SAVE_SUCCESS" = "保存成功";
+"SAVE_ERROR" = "保存失败";
+"DELETE" = "删除";
+"CONFIRM_DELETE_MSG" = "确认要删除吗？";
+"DELETE_SUCCESS" = "删除成功";
+"DELETE_ERROR" = "删除失败";
+
+"EDIT" = "编辑";
 
 "SETTING" = "设置";
 
@@ -45,13 +56,3 @@
 "ABOUT" = "关于";
 "VERSION" = "Version";
 "AUTHOR" = "作者";
-
-"SAVE" = "保存";
-"SAVE_SUCCESS" = "保存成功";
-"SAVE_ERROR" = "保存失败";
-"DELETE" = "删除";
-"CONFIRM_DELETE_MSG" = "确认要删除吗？";
-"DELETE_SUCCESS" = "删除成功";
-"DELETE_ERROR" = "删除失败";
-
-"EDIT" = "编辑";

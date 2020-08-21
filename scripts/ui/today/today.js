@@ -3,13 +3,10 @@ let HomeUI = require("/scripts/ui/main/home")
 class TodayUI {
     constructor(kernel) {
         this.kernel = kernel
-        if (!$cache.get("myday_top")) {
-            $cache.set("myday_top", HomeUI.template(this.kernel.storage.all()[0]))
-        }
     }
 
     get_top_view() {
-        let myday = $cache.get("myday_top")
+        let myday = HomeUI.template_top()
         if (!myday) $ui.render({
             views: [{
                 type: "label",
@@ -51,8 +48,11 @@ class TodayUI {
                     }
                 },
                 {
-                    type: "label",
-                    props: myday.date,
+                    type: "button",
+                    props: Object.assign({
+                        font: $font(14),
+                        contentEdgeInsets: 5
+                    }, myday.date),
                     layout: make => {
                         make.top.inset(25)
                         make.right.inset(20)
@@ -68,11 +68,9 @@ class TodayUI {
             props: {
                 data: HomeUI.to_template(this.kernel.storage.all()),
                 id: "mydays",
-                //separatorHidden: true,
                 selectable: false,
                 rowHeight: 80,
                 template: {
-                    props: {},
                     views: [
                         {
                             type: "label",

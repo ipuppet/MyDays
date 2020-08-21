@@ -70,8 +70,7 @@ class EditorUI {
                                 font: ["default", 14]
                             },
                             date: {
-                                color: ["red", "green"],
-                                font: ["default", 25]
+                                color: ["red", "##0E340"] // 此处就是两个#
                             }
                         }
                         let is_update = false
