@@ -81,7 +81,7 @@ class HomeUI {
             try {
                 data = HomeUI.template($cache.get("myday_top"))
             } catch (error) {
-                setTimeout(() => { $ui.toast($l10n("RESER_TOP")) }, 1000)
+                setTimeout(() => { $ui.toast($l10n("RESET_TOP")) }, 1000)
             }
         }
         return data
