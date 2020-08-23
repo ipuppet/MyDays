@@ -6,20 +6,9 @@ class ColorUI {
         this.factory = factory
         this.width = $device.info.screen.width
         this.palette = new Palette()
-        $cache.set("rgb_r", 255)
-        $cache.set("rgb_g", 255)
-        $cache.set("rgb_b", 255)
     }
 
-    push(myday = null, callback = null) {
-        if (myday === null) {
-            myday = {
-                title: "",
-                describe: "",
-                date: "",
-                style: []
-            }
-        }
+    push(color = null, callback = null) {
         let nav_buttons = [
             {
                 type: "button",
@@ -35,23 +24,15 @@ class ColorUI {
                 events: {
                     tapped: () => {
                         let rgb = this.palette.rgb
-                        callback($rgb(rgb[0], rgb[1], rgb[2]))
+                        // 返回HEX
+                        callback(Palette.RGB2HEX(rgb[0], rgb[1], rgb[2]))
+                        $ui.pop()
                     }
                 }
             }
         ]
-        let views = [
-            {
-                type: "view",
-                layout: $layout.fill,
-                views: [
-                    this.palette.template_display(),
-                    this.palette.template_tab(),
-                    this.palette.hsv_view("hsv_palette"),
-                    this.palette.rgb_view("rgb_palette", true),
-                ]
-            }
-        ]
+        this.palette.set_rgb(color.components.red, color.components.green, color.components.blue)
+        let views = [this.palette.get_view()]
         this.factory.push(views, $l10n("BACK"), nav_buttons)
     }
 }

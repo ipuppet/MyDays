@@ -31,14 +31,93 @@ class EditorUI {
         }
     }
 
+    template_custom() {
+        const template = (id, title, color) => {
+            return {
+                type: "view",
+                layout: (make, view) => {
+                    make.size.equalTo(55)
+                    const width = $device.info.screen.width
+                    let length = Object.keys(this.custom_style).length
+                    let inset = (width - length * 55) / (length + 1)
+                    if (view.prev)
+                        make.left.equalTo(view.prev.right).offset(inset)
+                    else
+                        make.left.inset(inset)
+                },
+                views: [
+                    {
+                        type: "button",
+                        props: {
+                            id: `custom_${id}`,
+                            info: color,
+                            radius: 20,
+                            borderWidth: 0.3,
+                            borderColor: $color("lightGray"),
+                            bgcolor: $color(color)
+                        },
+                        events: {
+                            tapped: sender => {
+                                this.color.push($color(color), hex => {
+                                    sender.bgcolor = $color(hex)
+                                    sender.info = hex
+                                })
+                            }
+                        },
+                        layout: (make, view) => {
+                            make.centerX.equalTo(view.super)
+                            make.top.inset(0)
+                            make.size.equalTo(40)
+                        }
+                    },
+                    {
+                        type: "label",
+                        props: {
+                            text: title,
+                            font: $font(12),
+                            textColor: $color("primaryText", "secondaryText")
+                        },
+                        layout: (make, view) => {
+                            make.centerX.equalTo(view.super)
+                            make.top.equalTo(view.prev.bottom)
+                        }
+                    }
+                ]
+            }
+        }
+        let list = []
+        for (let item of Object.keys(this.custom_style)) {
+            list.push(template(item, this.custom_style[item][0], this.custom_style[item][1]))
+        }
+        return list
+    }
+
     push(myday = null, callback = null) {
         if (myday === null) {
             myday = {
                 title: "",
                 describe: "",
                 date: "",
-                style: []
+                style: {
+                    title: {
+                        color: ["#333333", "secondaryText"],
+                        font: ["default", 30]
+                    },
+                    describe: {
+                        color: ["#333333", "secondaryText"],
+                        font: ["default", 14]
+                    },
+                    date: {
+                        color: ["red", "##0E340"]
+                    }
+                }
             }
+        }
+        this.custom_style = {
+            title: [$l10n("TITLE"), myday.style.title.color[0]],
+            describe: [$l10n("DESCRIBE"), myday.style.describe.color[0]],
+            days_pass: [$l10n("DAYS_PASS"), myday.style.date.color[0]],
+            days_left: [$l10n("DAYS_LEFT"), myday.style.date.color[1]],
         }
         let nav_buttons = [
             {
@@ -54,24 +133,24 @@ class EditorUI {
                 },
                 events: {
                     tapped: () => {
+                        myday.style = {
+                            title: {
+                                color: [$("custom_title").info, "secondaryText"],
+                                font: ["default", 30]
+                            },
+                            describe: {
+                                color: [$("custom_describe").info, "secondaryText"],
+                                font: ["default", 14]
+                            },
+                            date: {
+                                color: [$("custom_days_pass").info, $("custom_days_left").info]
+                            }
+                        }
                         myday.title = $("title").text.trim()
                         myday.describe = $("describe").text.trim()
                         myday.date = $("date").text.trim()
                         if (myday.date === "") {
                             myday.date = new Date().toLocaleDateString()
-                        }
-                        myday.style = {// 暂时不支持自定义
-                            title: {
-                                color: ["primaryText", "secondaryText"],
-                                font: ["default", 30]
-                            },
-                            describe: {
-                                color: ["primaryText", "secondaryText"],
-                                font: ["default", 14]
-                            },
-                            date: {
-                                color: ["red", "##0E340"] // 此处就是两个#
-                            }
                         }
                         let is_update = false
                         if (undefined !== myday.id) {
@@ -157,44 +236,29 @@ class EditorUI {
                     }
                 }
             },
-            /* {
+            {
+                type: "label",
+                props: {
+                    text: "以下颜色均为浅色模式下的颜色",
+                    font: $font(12),
+                    align: $align.center,
+                    textColor: $color("secondaryText")
+                },
+                layout: (make, view) => {
+                    make.left.inset(10)
+                    make.right.inset(0)
+                    make.top.equalTo(view.prev.bottom).offset(25)
+                }
+            },
+            {
                 type: "view",
-                props: { bgcolor: $color("blue") },
-                views: [
-                    {
-                        type: "label",
-                        props: {
-                            text: $l10n("TITLE_COLOR"),
-                            //textColor:$color()
-                        },
-                        events: {
-                            tapped: sender => {
-                                this.color.push()
-                            }
-                        },
-                        layout: (make, view) => {
-                            make.left.inset(10)
-                            make.top.equalTo(view.prev)
-                        }
-                    },
-                    {
-                        type: "label",
-                        props: {
-                            text: $l10n("TITLE_COLOR"),
-                            //textColor:$color()
-                        },
-                        layout: (make, view) => {
-                            make.left.inset(10)
-                            make.top.equalTo(view.prev)
-                        }
-                    }
-                ],
+                views: this.template_custom(),
                 layout: (make, view) => {
                     make.right.left.inset(0)
-                    make.top.equalTo(view.prev.bottom).offset(20)
-                    make.height.equalTo(50)
+                    make.top.equalTo(view.prev.bottom).offset(10)
+                    make.height.equalTo(60)
                 }
-            }, */
+            },
             {
                 type: "view",
                 views: [
@@ -207,7 +271,7 @@ class EditorUI {
                             font: $font(16),
                             line: 1,
                         },
-                        layout: make => {
+                        layout: (make, view) => {
                             make.left.inset(10)
                             make.width.equalTo(60)
                             make.height.equalTo(40)
@@ -220,6 +284,7 @@ class EditorUI {
                             id: "date",
                             editable: false,
                             align: $align.right,
+                            insets: $insets(11, 0, 0, 0),
                             bgcolor: $color("clear"),
                             text: myday.date ? new Date(myday.date).toLocaleDateString() : "",
                             textColor: this.factory.text_color,
@@ -251,7 +316,7 @@ class EditorUI {
                 ],
                 layout: (make, view) => {
                     make.right.left.inset(0)
-                    make.top.equalTo(view.prev.bottom).offset(20)
+                    make.top.equalTo(view.prev.bottom).offset(5)
                     make.height.equalTo(220)
                 }
             }
