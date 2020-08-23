@@ -278,7 +278,7 @@ class HomeUI {
                             color: $color("red"),
                             handler: (sender, indexPath) => {
                                 let data = sender.object(indexPath).info
-                                let date = sender.object(indexPath).date.text
+                                let date = sender.object(indexPath).date.title
                                 let delete_action = () => {
                                     if (this.kernel.storage.delete(data.id))
                                         sender.delete(indexPath)
