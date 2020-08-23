@@ -74,7 +74,7 @@ class Palette {
                         colors: [$color("#FF0000"), $color("#FFFF00"), $color("#00FF00"), $color("#00FFFF"), $color("#0000FF"), $color("#FF00FF"), $color("#FF0000")],
                         locations: [0.0, 0.125, 0.25, 0.5, 0.75, 0.875, 1.0],
                     }, {
-                    value: this.hsv[0],
+                    value: this.hsv[0] / 360,
                     events: value => {
                         this.hsv[0] = Math.ceil(value * 360)
                         this.update_hsv()
@@ -90,7 +90,7 @@ class Palette {
                         colors: [$color("white"), $rgb(this.rgb[0], this.rgb[1], this.rgb[2])],
                         locations: [0, 1]
                     }, {
-                    value: this.hsv[1],
+                    value: this.hsv[1] / 100,
                     events: value => {
                         this.hsv[1] = Math.ceil(value * 100)
                         this.update_hsv()
@@ -103,7 +103,7 @@ class Palette {
                         colors: [$color("black"), $rgb(this.rgb[0], this.rgb[1], this.rgb[2])],
                         locations: [0, 1]
                     }, {
-                    value: this.hsv[2],
+                    value: this.hsv[2] / 100,
                     events: value => {
                         this.hsv[2] = Math.ceil(value * 100)
                         this.update_hsv()
@@ -136,7 +136,7 @@ class Palette {
                         ],
                         locations: [0, 1],
                     }, {
-                    value: this.rgb[0],
+                    value: this.rgb[0] / 255,
                     events: value => {
                         this.rgb[0] = Math.ceil(value * 255)
                         this.update_rgb()
@@ -159,7 +159,7 @@ class Palette {
                         ],
                         locations: [0, 1]
                     }, {
-                    value: this.rgb[1],
+                    value: this.rgb[1] / 255,
                     events: value => {
                         this.rgb[1] = Math.ceil(value * 255)
                         this.update_rgb()
@@ -182,7 +182,7 @@ class Palette {
                         ],
                         locations: [0, 1]
                     }, {
-                    value: this.rgb[2],
+                    value: this.rgb[2] / 255,
                     events: value => {
                         this.rgb[2] = Math.ceil(value * 255)
                         this.update_rgb()
