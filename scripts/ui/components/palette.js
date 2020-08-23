@@ -7,6 +7,16 @@ class Palette {
         this.rgb = Palette.HSV2RGB(this.hsv[0], this.hsv[1], this.hsv[2])
     }
 
+    set_rgb(r, g, b) {
+        this.rgb = [r, g, b]
+        this.hsv = Palette.RGB2HSV(r, g, b)
+    }
+
+    set_hsv(h, s, v) {
+        this.hsv = [h, s, v]
+        this.rgb = Palette.HSV2RGB(h, s, v)
+    }
+
     display(color) {
         $("color_display").bgcolor = color
     }
