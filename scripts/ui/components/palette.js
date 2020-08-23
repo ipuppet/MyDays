@@ -1,7 +1,8 @@
 class Palette {
     constructor() {
         this.width = $device.info.screen.width
-        // 调色器离顶端的距离前半部分为预览框高度，+50为选项卡高度，+25为距离选项卡再远25
+        // 调色器离顶端的距离，因为有两个调色板所以写死高度比较方便
+        // 前半部分为预览框高度，+50为选项卡高度，+25为距离选项卡再远25
         this.palette_offset = this.width * 0.5 / 16 * 9 + 50 + 25
         this.hsv = [0, 100, 100]
         this.rgb = Palette.HSV2RGB(this.hsv[0], this.hsv[1], this.hsv[2])
@@ -37,6 +38,22 @@ class Palette {
         $("hsv_s_slider").value = this.hsv[1] / 100
         $("hsv_v_slider").value = this.hsv[2] / 100
         this.display($rgb(this.rgb[0], this.rgb[1], this.rgb[2]))
+    }
+
+    /**
+     * 获取完整视图
+     */
+    get_view() {
+        return {
+            type: "view",
+            layout: $layout.fill,
+            views: [
+                this.template_display(),
+                this.template_tab(),
+                this.hsv_view("hsv_palette"),
+                this.rgb_view("rgb_palette", true),
+            ]
+        }
     }
 
     hsv_view(id, hidden = false) {
