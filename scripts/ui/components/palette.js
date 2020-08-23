@@ -86,7 +86,10 @@ class Palette {
                     }
                 }, true),
                 this.template_slider("hsv_s", "Saturation", [this.hsv[1], "%",],
-                    { colors: [$color("white"), $color("#FF0000")], locations: [0, 1] }, {
+                    {
+                        colors: [$color("white"), $rgb(this.rgb[0], this.rgb[1], this.rgb[2])],
+                        locations: [0, 1]
+                    }, {
                     value: this.hsv[1],
                     events: value => {
                         this.hsv[1] = Math.ceil(value * 100)
@@ -96,7 +99,10 @@ class Palette {
                     }
                 }),
                 this.template_slider("hsv_v", "Value", [this.hsv[2], "%",],
-                    { colors: [$color("black"), $color("#FF0000")], locations: [0, 1] }, {
+                    {
+                        colors: [$color("black"), $rgb(this.rgb[0], this.rgb[1], this.rgb[2])],
+                        locations: [0, 1]
+                    }, {
                     value: this.hsv[2],
                     events: value => {
                         this.hsv[2] = Math.ceil(value * 100)
@@ -261,7 +267,7 @@ class Palette {
      * @param {*} cover 是否需要遮盖层，覆盖在渐变色条上方控制透明度和明度
      */
     template_slider(id, title, value, gradient, slider, cover = false) {
-        const get_cover = color => {
+        const get_cover = (color, alpha) => {
             return {
                 type: "view",
                 props: {
@@ -271,7 +277,7 @@ class Palette {
                     borderWidth: 0.2,
                     borderColor: $color("systemGray2"),
                     bgcolor: $color(color),
-                    alpha: 1 - this.hsv[1] / 100
+                    alpha: alpha
                 },
                 layout: (make, view) => {
                     make.centerY.equalTo(view.super)
@@ -363,8 +369,8 @@ class Palette {
                                 make.left.inset(60)
                             }
                         },
-                        get_cover("white"),
-                        get_cover("black"),
+                        get_cover("white", 1 - this.hsv[1] / 100),
+                        get_cover("black", 1 - this.hsv[2] / 100),
                         {
                             type: "slider",
                             props: {
