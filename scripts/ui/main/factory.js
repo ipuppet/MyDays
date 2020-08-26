@@ -16,12 +16,12 @@ class Factory extends BaseUI {
         // 菜单
         this.menu_data = [
             {
-                icon: { symbol: "house" },
-                title: { text: $l10n("HOME") }
+                icon: {symbol: "house"},
+                title: {text: $l10n("HOME")}
             },
             {
-                icon: { symbol: "gear" },
-                title: { text: $l10n("SETTING") }
+                icon: {symbol: "gear"},
+                title: {text: $l10n("SETTING")}
             }
         ]
     }

@@ -2,11 +2,11 @@ class Storage {
     constructor(setting) {
         this.setting = setting
         this.local_db = "/assets/MyDays.db"
-        this.icloud_path = "drive://MyDays/"
-        this.icloud_db = this.icloud_path + "MyDays.db"
-        this.icloud_auto_db = this.icloud_path + "auto.db"
+        this.iCloud_path = "drive://MyDays/"
+        this.iCloud_db = this.iCloud_path + "MyDays.db"
+        this.iCloud_auto_db = this.iCloud_path + "auto.db"
         this.sqlite = $sqlite.open(this.local_db)
-        this.sqlite.update("CREATE TABLE IF NOT EXISTS mydays(id INTEGER PRIMARY KEY NOT NULL, title TEXT, describe TEXT, date TEXT, style TEXT)")
+        this.sqlite.update("CREATE TABLE IF NOT EXISTS mydays(id INTEGER PRIMARY KEY NOT NULL, title TEXT, `describe` TEXT, date TEXT, style TEXT)")
     }
 
     parse(result) {
@@ -38,25 +38,24 @@ class Storage {
             sql: "SELECT * FROM mydays WHERE title like ?",
             args: [`%${kw}%`]
         })
-        let data = this.parse(result)
-        return data
+        return this.parse(result)
     }
 
     save(myday) {
-        let result = null
+        let result
         myday.style = myday.style ? myday.style : []
         result = this.sqlite.update({
-            sql: "INSERT INTO mydays (title, describe, date, style) values(?, ?, ?, ?)",
+            sql: "INSERT INTO mydays (title, `describe`, date, style) values(?, ?, ?, ?)",
             args: [myday.title, myday.describe, myday.date, JSON.stringify(myday.style)]
         })
         if (result.result) {
             if (this.setting.get("setting.backup.auto_backup")) {
-                if (!$file.exists(this.icloud_path)) {
-                    $file.mkdir(this.icloud_path)
+                if (!$file.exists(this.iCloud_path)) {
+                    $file.mkdir(this.iCloud_path)
                 }
                 $file.write({
-                    data: $data({ path: this.local_db }),
-                    path: this.icloud_auto_db
+                    data: $data({path: this.local_db}),
+                    path: this.iCloud_auto_db
                 })
             }
             return true
@@ -66,16 +65,16 @@ class Storage {
     }
 
     has_backup() {
-        return $file.exists(this.icloud_db)
+        return $file.exists(this.iCloud_db)
     }
 
     backup_to_iCloud() {
-        if (!$file.exists(this.icloud_path)) {
-            $file.mkdir(this.icloud_path)
+        if (!$file.exists(this.iCloud_path)) {
+            $file.mkdir(this.iCloud_path)
         }
         return $file.write({
-            data: $data({ path: this.local_db }),
-            path: this.icloud_db
+            data: $data({path: this.local_db}),
+            path: this.iCloud_db
         })
     }
 
@@ -91,9 +90,9 @@ class Storage {
     }
 
     update(myday) {
-        let result = null
+        let result
         result = this.sqlite.update({
-            sql: "UPDATE mydays SET title = ?, describe = ?, date = ?,style = ? WHERE id = ?",
+            sql: "UPDATE mydays SET title = ?, `describe` = ?, date = ?,style = ? WHERE id = ?",
             args: [myday.title, myday.describe, myday.date, JSON.stringify(myday.style), myday.id]
         })
         if (result.result) {

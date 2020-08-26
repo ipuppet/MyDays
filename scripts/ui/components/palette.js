@@ -8,6 +8,99 @@ class Palette {
         this.rgb = Palette.HSV2RGB(this.hsv[0], this.hsv[1], this.hsv[2])
     }
 
+    static HSV2RGB(h, s, v) {
+        h = h > 359 ? 0 : h
+        s = s / 100
+        v = v / 100
+        let r = 0, g = 0, b = 0
+        let i = parseInt((h / 60) % 6)
+        let f = h / 60 - i
+        let p = v * (1 - s)
+        let q = v * (1 - f * s)
+        let t = v * (1 - (1 - f) * s)
+        switch (i) {
+            case 0:
+                r = v
+                g = t
+                b = p
+                break
+            case 1:
+                r = q
+                g = v
+                b = p
+                break
+            case 2:
+                r = p
+                g = v
+                b = t
+                break
+            case 3:
+                r = p
+                g = q
+                b = v
+                break
+            case 4:
+                r = t
+                g = p
+                b = v
+                break
+            case 5:
+                r = v
+                g = p
+                b = q
+                break
+            default:
+                break
+        }
+        r = r * 255
+        g = g * 255
+        b = b * 255
+        return [Math.ceil(r), Math.ceil(g), Math.ceil(b)]
+    }
+
+    static RGB2HSV(r, g, b) {
+        r = r / 255
+        g = g / 255
+        b = b / 255
+        let h, s, v
+        let min = Math.min(r, g, b)
+        let max = v = Math.max(r, g, b)
+        let difference = max - min
+        if (max === min) {
+            h = 0
+        } else {
+            switch (max) {
+                case r:
+                    h = (g - b) / difference + (g < b ? 6 : 0)
+                    break
+                case g:
+                    h = 2.0 + (b - r) / difference
+                    break
+                case b:
+                    h = 4.0 + (r - g) / difference
+                    break
+            }
+            h = Math.round(h * 60)
+        }
+        if (max === 0) {
+            s = 0
+        } else {
+            s = 1 - min / max
+        }
+        s = Math.round(s * 100)
+        v = Math.round(v * 100)
+        return [h, s, v]
+    }
+
+    static HSV2HEX(h, s, v) {
+        let rgb = Palette.HSV2RGB(h, s, v)
+        return Palette.RGB2HEX(rgb[0], rgb[1], rgb[2])
+    }
+
+    static RGB2HEX(r, g, b) {
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+    }
+
     set_rgb(r, g, b) {
         this.rgb = [r, g, b]
         this.hsv = Palette.RGB2HSV(r, g, b)
@@ -73,44 +166,49 @@ class Palette {
                     {
                         colors: [$color("#FF0000"), $color("#FFFF00"), $color("#00FF00"), $color("#00FFFF"), $color("#0000FF"), $color("#FF00FF"), $color("#FF0000")],
                         locations: [0.0, 0.125, 0.25, 0.5, 0.75, 0.875, 1.0],
-                    }, {
-                    value: this.hsv[0] / 360,
-                    events: value => {
-                        this.hsv[0] = Math.ceil(value * 360)
-                        this.update_hsv()
-                        // 改变下面两个条的颜色，此时 this.rgb 已经更新
-                        let rgb = $rgb(this.rgb[0], this.rgb[1], this.rgb[2])
-                        $("hsv_s_gradient").colors = [$color("white"), rgb]
-                        $("hsv_v_gradient").colors = [$color("black"), rgb]
-                        return this.hsv[0]
-                    }
-                }, true),
+                    },
+                    {
+                        value: this.hsv[0] / 360,
+                        events: value => {
+                            this.hsv[0] = Math.ceil(value * 360)
+                            this.update_hsv()
+                            // 改变下面两个条的颜色，此时 this.rgb 已经更新
+                            let rgb = $rgb(this.rgb[0], this.rgb[1], this.rgb[2])
+                            $("hsv_s_gradient").colors = [$color("white"), rgb]
+                            $("hsv_v_gradient").colors = [$color("black"), rgb]
+                            return this.hsv[0]
+                        }
+                    }, true),
                 this.template_slider("hsv_s", "Saturation", [this.hsv[1], "%",],
                     {
                         colors: [$color("white"), $rgb(this.rgb[0], this.rgb[1], this.rgb[2])],
                         locations: [0, 1]
-                    }, {
-                    value: this.hsv[1] / 100,
-                    events: value => {
-                        this.hsv[1] = Math.ceil(value * 100)
-                        this.update_hsv()
-                        $("hsv_h_cover_white").alpha = 1 - value
-                        return this.hsv[1]
+                    },
+                    {
+                        value: this.hsv[1] / 100,
+                        events: value => {
+                            this.hsv[1] = Math.ceil(value * 100)
+                            this.update_hsv()
+                            $("hsv_h_cover_white").alpha = 1 - value
+                            return this.hsv[1]
+                        }
                     }
-                }),
+                ),
                 this.template_slider("hsv_v", "Value", [this.hsv[2], "%",],
                     {
                         colors: [$color("black"), $rgb(this.rgb[0], this.rgb[1], this.rgb[2])],
                         locations: [0, 1]
-                    }, {
-                    value: this.hsv[2] / 100,
-                    events: value => {
-                        this.hsv[2] = Math.ceil(value * 100)
-                        this.update_hsv()
-                        $("hsv_h_cover_black").alpha = 1 - value
-                        return this.hsv[2]
+                    },
+                    {
+                        value: this.hsv[2] / 100,
+                        events: value => {
+                            this.hsv[2] = Math.ceil(value * 100)
+                            this.update_hsv()
+                            $("hsv_h_cover_black").alpha = 1 - value
+                            return this.hsv[2]
+                        }
                     }
-                })
+                )
             ]
         }
     }
@@ -135,22 +233,24 @@ class Palette {
                             $rgb(255, this.rgb[1], this.rgb[2])
                         ],
                         locations: [0, 1],
-                    }, {
-                    value: this.rgb[0] / 255,
-                    events: value => {
-                        this.rgb[0] = Math.ceil(value * 255)
-                        this.update_rgb()
-                        $("rgb_g_gradient").colors = [
-                            $rgb(this.rgb[0], 0, this.rgb[2]),
-                            $rgb(this.rgb[0], 255, this.rgb[2])
-                        ]
-                        $("rgb_b_gradient").colors = [
-                            $rgb(this.rgb[0], this.rgb[1], 0),
-                            $rgb(this.rgb[0], this.rgb[1], 255)
-                        ]
-                        return this.rgb[0]
+                    },
+                    {
+                        value: this.rgb[0] / 255,
+                        events: value => {
+                            this.rgb[0] = Math.ceil(value * 255)
+                            this.update_rgb()
+                            $("rgb_g_gradient").colors = [
+                                $rgb(this.rgb[0], 0, this.rgb[2]),
+                                $rgb(this.rgb[0], 255, this.rgb[2])
+                            ]
+                            $("rgb_b_gradient").colors = [
+                                $rgb(this.rgb[0], this.rgb[1], 0),
+                                $rgb(this.rgb[0], this.rgb[1], 255)
+                            ]
+                            return this.rgb[0]
+                        }
                     }
-                }),
+                ),
                 this.template_slider("rgb_g", "Green", [this.rgb[1], "",],
                     {
                         colors: [
@@ -158,22 +258,24 @@ class Palette {
                             $rgb(this.rgb[0], 255, this.rgb[2])
                         ],
                         locations: [0, 1]
-                    }, {
-                    value: this.rgb[1] / 255,
-                    events: value => {
-                        this.rgb[1] = Math.ceil(value * 255)
-                        this.update_rgb()
-                        $("rgb_r_gradient").colors = [
-                            $rgb(0, this.rgb[1], this.rgb[2]),
-                            $rgb(255, this.rgb[1], this.rgb[2])
-                        ]
-                        $("rgb_b_gradient").colors = [
-                            $rgb(this.rgb[0], this.rgb[1], 0),
-                            $rgb(this.rgb[0], this.rgb[1], 255)
-                        ]
-                        return this.rgb[1]
+                    },
+                    {
+                        value: this.rgb[1] / 255,
+                        events: value => {
+                            this.rgb[1] = Math.ceil(value * 255)
+                            this.update_rgb()
+                            $("rgb_r_gradient").colors = [
+                                $rgb(0, this.rgb[1], this.rgb[2]),
+                                $rgb(255, this.rgb[1], this.rgb[2])
+                            ]
+                            $("rgb_b_gradient").colors = [
+                                $rgb(this.rgb[0], this.rgb[1], 0),
+                                $rgb(this.rgb[0], this.rgb[1], 255)
+                            ]
+                            return this.rgb[1]
+                        }
                     }
-                }),
+                ),
                 this.template_slider("rgb_b", "Blue", [this.rgb[2], "",],
                     {
                         colors: [
@@ -181,22 +283,24 @@ class Palette {
                             $rgb(this.rgb[0], this.rgb[1], 255)
                         ],
                         locations: [0, 1]
-                    }, {
-                    value: this.rgb[2] / 255,
-                    events: value => {
-                        this.rgb[2] = Math.ceil(value * 255)
-                        this.update_rgb()
-                        $("rgb_r_gradient").colors = [
-                            $rgb(0, this.rgb[1], this.rgb[2]),
-                            $rgb(255, this.rgb[1], this.rgb[2])
-                        ]
-                        $("rgb_g_gradient").colors = [
-                            $rgb(this.rgb[0], 0, this.rgb[2]),
-                            $rgb(this.rgb[0], 255, this.rgb[2])
-                        ]
-                        return this.rgb[2]
+                    },
+                    {
+                        value: this.rgb[2] / 255,
+                        events: value => {
+                            this.rgb[2] = Math.ceil(value * 255)
+                            this.update_rgb()
+                            $("rgb_r_gradient").colors = [
+                                $rgb(0, this.rgb[1], this.rgb[2]),
+                                $rgb(255, this.rgb[1], this.rgb[2])
+                            ]
+                            $("rgb_g_gradient").colors = [
+                                $rgb(this.rgb[0], 0, this.rgb[2]),
+                                $rgb(this.rgb[0], 255, this.rgb[2])
+                            ]
+                            return this.rgb[2]
+                        }
                     }
-                })
+                )
             ]
         }
     }
@@ -393,99 +497,6 @@ class Palette {
                 }
             ]
         }
-    }
-
-    static HSV2RGB(h, s, v) {
-        h = h > 359 ? 0 : h
-        s = s / 100
-        v = v / 100
-        let r = 0, g = 0, b = 0
-        let i = parseInt((h / 60) % 6)
-        let f = h / 60 - i
-        let p = v * (1 - s)
-        let q = v * (1 - f * s)
-        let t = v * (1 - (1 - f) * s)
-        switch (i) {
-            case 0:
-                r = v
-                g = t
-                b = p
-                break
-            case 1:
-                r = q
-                g = v
-                b = p
-                break
-            case 2:
-                r = p
-                g = v
-                b = t
-                break
-            case 3:
-                r = p
-                g = q
-                b = v
-                break
-            case 4:
-                r = t
-                g = p
-                b = v
-                break
-            case 5:
-                r = v
-                g = p
-                b = q
-                break
-            default:
-                break
-        }
-        r = r * 255
-        g = g * 255
-        b = b * 255
-        return [Math.ceil(r), Math.ceil(g), Math.ceil(b)]
-    }
-
-    static RGB2HSV(r, g, b) {
-        r = r / 255
-        g = g / 255
-        b = b / 255
-        let h, s, v
-        let min = Math.min(r, g, b)
-        let max = v = Math.max(r, g, b)
-        let difference = max - min
-        if (max == min) {
-            h = 0
-        } else {
-            switch (max) {
-                case r:
-                    h = (g - b) / difference + (g < b ? 6 : 0)
-                    break
-                case g:
-                    h = 2.0 + (b - r) / difference
-                    break
-                case b:
-                    h = 4.0 + (r - g) / difference
-                    break
-            }
-            h = Math.round(h * 60)
-        }
-        if (max == 0) {
-            s = 0
-        } else {
-            s = 1 - min / max
-        }
-        s = Math.round(s * 100)
-        v = Math.round(v * 100)
-        return [h, s, v]
-    }
-
-    static HSV2HEX(h, s, v) {
-        let rgb = Palette.HSV2RGB(h, s, v)
-        return Palette.RGB2HEX(rgb[0], rgb[1], rgb[2])
-    }
-
-    static RGB2HEX(r, g, b) {
-        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
     }
 }
 

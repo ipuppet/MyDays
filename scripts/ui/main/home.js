@@ -43,7 +43,7 @@ class HomeUI {
 
     /**
      * 将数据转换为模板需要的格式
-     * @param {*} data 
+     * @param {*} data
      */
     static template(data) {
         if (!data) return
@@ -81,7 +81,9 @@ class HomeUI {
             try {
                 data = HomeUI.template($cache.get("myday_top"))
             } catch (error) {
-                setTimeout(() => { $ui.toast($l10n("RESET_TOP")) }, 1000)
+                setTimeout(() => {
+                    $ui.toast($l10n("RESET_TOP"))
+                }, 1000)
             }
         }
         return data
@@ -121,7 +123,9 @@ class HomeUI {
                         },
                         events: {
                             tapped: () => {
-                                this.editor.push(null, () => { HomeUI.update(this.kernel.storage.all()) })
+                                this.editor.push(null, () => {
+                                    HomeUI.update(this.kernel.storage.all())
+                                })
                             }
                         }
                     }
@@ -156,7 +160,7 @@ class HomeUI {
                 views: [
                     {
                         type: "label",
-                        props: Object.assign({ id: "myday_top_title" }, myday_top.title),
+                        props: Object.assign({id: "myday_top_title"}, myday_top.title),
                         layout: (make) => {
                             make.top.inset(0)
                             make.left.inset(20)
@@ -165,7 +169,7 @@ class HomeUI {
                     },
                     {
                         type: "label",
-                        props: Object.assign({ id: "myday_top_describe" }, myday_top.describe),
+                        props: Object.assign({id: "myday_top_describe"}, myday_top.describe),
                         layout: (make, view) => {
                             make.bottom.inset(20)
                             make.left.equalTo(view.prev)
@@ -228,7 +232,7 @@ class HomeUI {
                                     }),
                                     align: $align.center
                                 },
-                                layout: (make, view) => {
+                                layout: make => {
                                     make.bottom.inset(5)
                                     make.left.right.inset(0)
                                 }
@@ -240,11 +244,11 @@ class HomeUI {
                         views: [
                             {
                                 type: "label",
-                                props: { id: "info", hidden: true }
+                                props: {id: "info", hidden: true}
                             },
                             {
                                 type: "label",
-                                props: { id: "title" },
+                                props: {id: "title"},
                                 layout: (make) => {
                                     make.top.inset(10)
                                     make.left.inset(20)
@@ -252,7 +256,7 @@ class HomeUI {
                             },
                             {
                                 type: "label",
-                                props: { id: "describe" },
+                                props: {id: "describe"},
                                 layout: (make, view) => {
                                     make.bottom.inset(10)
                                     make.left.equalTo(view.prev)
@@ -292,7 +296,7 @@ class HomeUI {
                                                 title: $l10n("OK"),
                                                 handler: delete_action
                                             },
-                                            { title: $l10n("CANCEL") }
+                                            {title: $l10n("CANCEL")}
                                         ]
                                     })
                                 } else {
