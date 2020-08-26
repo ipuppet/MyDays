@@ -194,7 +194,7 @@ class BaseUISetting {
                                 placeholder: title,
                                 handler: (text) => {
                                     const is_number = (str) => {
-                                        var reg = /^[0-9]+.?[0-9]*$/
+                                        let reg = /^[0-9]+.?[0-9]*$/
                                         return reg.test(str)
                                     }
                                     if (text === "" || !is_number(text)) {
