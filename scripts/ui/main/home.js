@@ -14,7 +14,9 @@ class HomeUI {
     static update_top(data) {
         $cache.set("myday_top", data)
         let template = HomeUI.template(data)
+        $("myday_top_date_raw").props = template.date_raw
         $("myday_top_title").props = template.title
+        $("myday_top_date_flag").props = template.date_flag
         $("myday_top_describe").props = template.describe
         $("myday_top_date").props = template.date
     }
@@ -24,6 +26,7 @@ class HomeUI {
         if (Math.abs(span) < 1000 * 60 * 60 * 24) {
             return {
                 color: 0,
+                flag: $l10n("DAYS_LEFT"),
                 text: $l10n("LESS_THAN_A_DAY")
             }
         }
@@ -37,7 +40,8 @@ class HomeUI {
         let flag = result > 0 ? $l10n("DAYS_LEFT") : $l10n("DAYS_PASS")
         return {
             color: result > 0 ? 1 : 0,
-            text: `${flag} ${Math.abs(result)} ${unit}`
+            flag: flag,
+            text: `${Math.abs(result)} ${unit}`
         }
     }
 
@@ -50,15 +54,24 @@ class HomeUI {
         let date = HomeUI.date_span(data.date)
         return {
             info: data,
+            date_raw: {
+                text: new Date(data.date).toLocaleDateString(),
+                font: $font(12),
+                textColor: $color("secondaryText")
+            },
             title: {
                 text: data.title,
-                textColor: $color(data.style.title.color[0], data.style.title.color[1]),
-                font: $font(data.style.title.font[0], data.style.title.font[1])
+                font: $font(30),
+                textColor: $color(data.style.title.color[0], data.style.title.color[1])
+            },
+            date_flag: {
+                text: date.flag,
+                font: $font(16)
             },
             describe: {
                 text: data.describe,
-                textColor: $color(data.style.describe.color[0], data.style.describe.color[1]),
-                font: $font(data.style.describe.font[0], data.style.describe.font[1])
+                font: $font(14),
+                textColor: $color(data.style.describe.color[0], data.style.describe.color[1])
             },
             date: {
                 info: data.index,
@@ -96,7 +109,7 @@ class HomeUI {
     get_views() {
         let myday_top = HomeUI.template_top()
         return [
-            {
+            { // nav
                 type: "view",
                 layout: (make, view) => {
                     make.top.equalTo(view.super.safeAreaTop)
@@ -164,37 +177,52 @@ class HomeUI {
                 views: [
                     {
                         type: "label",
+                        props: Object.assign({ id: "myday_top_date_raw" }, myday_top.date_raw),
+                        layout: make => {
+                            make.top.inset(5)
+                            make.right.inset(20)
+                        }
+                    },
+                    {
+                        type: "label",
                         props: Object.assign({ id: "myday_top_title" }, myday_top.title),
-                        layout: (make) => {
-                            make.top.inset(0)
+                        layout: (make, view) => {
+                            make.centerY.equalTo(view.super).offset(-15)
                             make.left.inset(20)
                             make.height.equalTo(50)
                         }
                     },
                     {
                         type: "label",
+                        props: Object.assign({ id: "myday_top_date_flag" }, myday_top.date_flag),
+                        layout: (make, view) => {
+                            make.centerY.equalTo(view.super).offset(-9)
+                            make.left.equalTo(view.prev.right).offset(5)
+                            make.height.equalTo(20)
+                        }
+                    },
+                    {
+                        type: "label",
                         props: Object.assign({ id: "myday_top_describe" }, myday_top.describe),
                         layout: (make, view) => {
-                            make.bottom.inset(20)
-                            make.left.equalTo(view.prev)
-                            make.height.equalTo(20)
+                            make.top.equalTo(view.prev.bottom).offset(10)
+                            make.left.equalTo(20)
                         }
                     },
                     {
                         type: "button",
                         props: Object.assign({
                             id: "myday_top_date",
-                            font: $font(14),
                             contentEdgeInsets: 5
                         }, myday_top.date),
-                        layout: make => {
-                            make.top.inset(25)
+                        layout: (make, view) => {
+                            make.centerY.equalTo(view.super)
                             make.right.inset(20)
                         }
                     }
                 ]
             },
-            {
+            { // 列表
                 type: "list",
                 props: {
                     data: HomeUI.template_list(this.kernel.storage.all()),
@@ -250,18 +278,36 @@ class HomeUI {
                             },
                             {
                                 type: "label",
+                                props: { id: "date_raw" },
+                                layout: make => {
+                                    make.top.inset(5)
+                                    make.right.inset(20)
+                                }
+                            },
+                            {
+                                type: "label",
                                 props: { id: "title" },
-                                layout: (make) => {
-                                    make.top.inset(10)
+                                layout: (make, view) => {
+                                    make.centerY.equalTo(view.super).offset(-15)
                                     make.left.inset(20)
+                                    make.height.equalTo(50)
+                                }
+                            },
+                            {
+                                type: "label",
+                                props: { id: "date_flag" },
+                                layout: (make, view) => {
+                                    make.centerY.equalTo(view.super).offset(-9)
+                                    make.left.equalTo(view.prev.right).offset(5)
+                                    make.height.equalTo(20)
                                 }
                             },
                             {
                                 type: "label",
                                 props: { id: "describe" },
                                 layout: (make, view) => {
-                                    make.bottom.inset(10)
-                                    make.left.equalTo(view.prev)
+                                    make.top.equalTo(view.prev.bottom).offset(10)
+                                    make.left.equalTo(20)
                                 }
                             },
                             {

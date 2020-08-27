@@ -15,7 +15,7 @@
 "DATE" = "日期";
 "CHOOSE_DATE" = "选择日期";
 "DAY" = "天";
-"LESS_THAN_A_DAY" = "还有不到一天";
+"LESS_THAN_A_DAY" = "不到一天";
 "DAYS_LEFT" = "还有";
 "DAYS_PASS" = "过了";
 "LIST_END" = "已经到底啦~";

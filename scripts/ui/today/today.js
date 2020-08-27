@@ -31,30 +31,43 @@ class TodayUI {
             views: [
                 {
                     type: "label",
+                    props: myday.date_raw,
+                    layout: make => {
+                        make.top.inset(5)
+                        make.right.inset(20)
+                    }
+                },
+                {
+                    type: "label",
                     props: myday.title,
-                    layout: (make) => {
-                        make.top.inset(0)
+                    layout: (make, view) => {
+                        make.centerY.equalTo(view.super).offset(-15)
                         make.left.inset(20)
                         make.height.equalTo(50)
                     }
                 },
                 {
                     type: "label",
-                    props: myday.describe,
+                    props: myday.date_flag,
                     layout: (make, view) => {
-                        make.bottom.inset(20)
-                        make.left.equalTo(view.prev)
+                        make.centerY.equalTo(view.super).offset(-9)
+                        make.left.equalTo(view.prev.right).offset(5)
                         make.height.equalTo(20)
                     }
                 },
                 {
+                    type: "label",
+                    props: myday.describe,
+                    layout: (make, view) => {
+                        make.top.equalTo(view.prev.bottom).offset(10)
+                        make.left.equalTo(20)
+                    }
+                },
+                {
                     type: "button",
-                    props: Object.assign({
-                        font: $font(14),
-                        contentEdgeInsets: 5
-                    }, myday.date),
-                    layout: make => {
-                        make.top.inset(25)
+                    props: Object.assign({ contentEdgeInsets: 5 }, myday.date),
+                    layout: (make, view) => {
+                        make.centerY.equalTo(view.super)
                         make.right.inset(20)
                     },
                     events: {
