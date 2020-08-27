@@ -92,7 +92,7 @@ class Storage {
     update(myday) {
         let result
         result = this.sqlite.update({
-            sql: "UPDATE mydays SET title = ?, `describe` = ?, date = ?,style = ? WHERE id = ?",
+            sql: "UPDATE mydays SET title = ?, `describe` = ?, date = ?, style = ? WHERE id = ?",
             args: [myday.title, myday.describe, myday.date, JSON.stringify(myday.style), myday.id]
         })
         if (result.result) {
