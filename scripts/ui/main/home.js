@@ -348,7 +348,7 @@ class HomeUI {
                                     if (this.kernel.storage.delete(data.id))
                                         sender.delete(indexPath)
                                 }
-                                if (this.kernel.setting.get("setting.general.delete_confirm")) {
+                                if (this.kernel.setting.get("general.delete_confirm")) {
                                     $ui.alert({
                                         title: $l10n("CONFIRM_DELETE_MSG"),
                                         message: `${data.title} \n ${data.date} ${date}`,

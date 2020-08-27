@@ -131,7 +131,7 @@ class TodayUI {
     }
 
     render() {
-        let mode = this.kernel.setting.get("setting.general.today_mode")
+        let mode = this.kernel.setting.get("general.today_mode")
         let view = mode ? this.get_list_view() : this.get_top_view()
         $ui.render({
             views: [view]
