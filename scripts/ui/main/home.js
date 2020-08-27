@@ -218,6 +218,19 @@ class HomeUI {
                         layout: (make, view) => {
                             make.centerY.equalTo(view.super)
                             make.right.inset(20)
+                        },
+                        events: {
+                            tapped: () => {
+                                if (!this.home_top_tapped) {
+                                    this.home_top_tapped = 1
+                                } else {
+                                    this.home_top_tapped++
+                                }
+                                if (this.home_top_tapped >= 3) {
+                                    this.home_top_tapped = 0
+                                    $ui.alert("再点就点坏啦！😖")
+                                }
+                            }
                         }
                     }
                 ]

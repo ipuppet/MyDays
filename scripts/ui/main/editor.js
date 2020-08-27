@@ -99,15 +99,9 @@ class EditorUI {
                 describe: "",
                 date: "",
                 style: {
-                    title: {
-                        color: ["#333333", "secondaryText"]
-                    },
-                    describe: {
-                        color: ["#333333", "secondaryText"]
-                    },
-                    date: {
-                        color: ["red", "##0E340"]
-                    }
+                    title: { color: ["#333333", "secondaryText"] },
+                    describe: { color: ["#333333", "secondaryText"] },
+                    date: { color: ["red", "##0E340"] }
                 }
             }
         }
