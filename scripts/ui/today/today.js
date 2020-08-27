@@ -56,6 +56,11 @@ class TodayUI {
                     layout: make => {
                         make.top.inset(25)
                         make.right.inset(20)
+                    },
+                    events: {
+                        tapped: () => {
+                            $app.openURL(`jsbox://run?name=MyDays&location=today&index=${myday.info.index}`)
+                        }
                     }
                 }
             ]
@@ -66,20 +71,12 @@ class TodayUI {
         return {
             type: "list",
             props: {
-                data: HomeUI.to_template(this.kernel.storage.all()),
+                data: HomeUI.template_list(this.kernel.storage.all()),
                 id: "mydays",
                 selectable: false,
                 rowHeight: 80,
                 template: {
                     views: [
-                        {
-                            type: "label",
-                            props: { id: "info" },
-                            layout: (make) => {
-                                make.top.inset(10)
-                                make.left.inset(20)
-                            }
-                        },
                         {
                             type: "label",
                             props: { id: "title" },
@@ -97,12 +94,20 @@ class TodayUI {
                             }
                         },
                         {
-                            type: "label",
-                            props: { id: "date" },
+                            type: "button",
+                            props: {
+                                id: "date",
+                                font: $font(14),
+                                contentEdgeInsets: 5
+                            },
+                            events: {
+                                tapped: sender => {
+                                    $app.openURL(`jsbox://run?name=MyDays&location=today&index=${sender.info}`)
+                                }
+                            },
                             layout: (make, view) => {
-                                make.bottom.inset(10)
                                 make.centerY.equalTo(view.super)
-                                make.right.inset(10)
+                                make.right.inset(20)
                             }
                         }
                     ]

@@ -61,6 +61,7 @@ class HomeUI {
                 font: $font(data.style.describe.font[0], data.style.describe.font[1])
             },
             date: {
+                info: data.index,
                 title: date.text,
                 bgcolor: $color(data.style.date.color[date.color])
             }
@@ -69,7 +70,10 @@ class HomeUI {
 
     static template_list(data) {
         let result = []
+        let index = 0
         for (let myday of data) {
+            myday["index"] = index
+            index++
             result.push(HomeUI.template(myday))
         }
         return result
@@ -198,9 +202,7 @@ class HomeUI {
                     indicatorInsets: $insets(0, 0, 50, 0),
                     header: {
                         type: "view",
-                        props: {
-                            height: 30
-                        },
+                        props: { height: 30 },
                         views: [
                             {
                                 type: "label",
@@ -309,6 +311,7 @@ class HomeUI {
                             color: $color("orange"),
                             handler: (sender, indexPath) => {
                                 let data = sender.object(indexPath).info
+                                data["index"] = indexPath.item
                                 HomeUI.update_top(data)
                             }
                         }
@@ -322,6 +325,17 @@ class HomeUI {
                                 HomeUI.update_top(data.info)
                             }
                         })
+                    },
+                    ready: sender => { // 检查是否是从Today进入的
+                        let query = $context.query
+                        if (query.location === "today") {
+                            setTimeout(() => {
+                                // sender.scrollTo({ indexPath: $indexPath(0, query.index) })
+                                // 上面那种滚动位置不大对
+                                let offset = query.index * 80 + 25
+                                sender.scrollToOffset($point(0, offset))
+                            }, 500)
+                        }
                     }
                 },
                 layout: (make, view) => {
