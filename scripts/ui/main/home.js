@@ -160,7 +160,7 @@ class HomeUI {
                 views: [
                     {
                         type: "label",
-                        props: Object.assign({id: "myday_top_title"}, myday_top.title),
+                        props: Object.assign({ id: "myday_top_title" }, myday_top.title),
                         layout: (make) => {
                             make.top.inset(0)
                             make.left.inset(20)
@@ -169,7 +169,7 @@ class HomeUI {
                     },
                     {
                         type: "label",
-                        props: Object.assign({id: "myday_top_describe"}, myday_top.describe),
+                        props: Object.assign({ id: "myday_top_describe" }, myday_top.describe),
                         layout: (make, view) => {
                             make.bottom.inset(20)
                             make.left.equalTo(view.prev)
@@ -244,11 +244,11 @@ class HomeUI {
                         views: [
                             {
                                 type: "label",
-                                props: {id: "info", hidden: true}
+                                props: { id: "info", hidden: true }
                             },
                             {
                                 type: "label",
-                                props: {id: "title"},
+                                props: { id: "title" },
                                 layout: (make) => {
                                     make.top.inset(10)
                                     make.left.inset(20)
@@ -256,7 +256,7 @@ class HomeUI {
                             },
                             {
                                 type: "label",
-                                props: {id: "describe"},
+                                props: { id: "describe" },
                                 layout: (make, view) => {
                                     make.bottom.inset(10)
                                     make.left.equalTo(view.prev)
@@ -296,7 +296,7 @@ class HomeUI {
                                                 title: $l10n("OK"),
                                                 handler: delete_action
                                             },
-                                            {title: $l10n("CANCEL")}
+                                            { title: $l10n("CANCEL") }
                                         ]
                                     })
                                 } else {

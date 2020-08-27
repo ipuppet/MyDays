@@ -12,7 +12,7 @@ class EditorUI {
             $ui.toast($l10n("NO_myday"))
             return false
         }
-        let result = false
+        let result
         if (is_update) {
             result = this.kernel.storage.update(myday)
         } else {
@@ -117,7 +117,7 @@ class EditorUI {
             title: [$l10n("TITLE"), myday.style.title.color[0]],
             describe: [$l10n("DESCRIBE"), myday.style.describe.color[0]],
             days_pass: [$l10n("DAYS_PASS"), myday.style.date.color[0]],
-            days_left: [$l10n("DAYS_LEFT"), myday.style.date.color[1]],
+            days_left: [$l10n("DAYS_LEFT"), myday.style.date.color[1]]
         }
         let nav_buttons = [
             {
@@ -169,7 +169,7 @@ class EditorUI {
                     textColor: this.factory.text_color,
                     align: $align.left,
                     font: $font(16),
-                    line: 1,
+                    line: 1
                 },
                 layout: make => {
                     make.left.inset(10)
@@ -186,7 +186,7 @@ class EditorUI {
                     insets: 0,
                     text: myday.title,
                     placeholder: $l10n("TITLE"),
-                    textColor: this.factory.text_color,
+                    textColor: this.factory.text_color
                 },
                 layout: (make, view) => {
                     make.right.inset(10)
@@ -206,7 +206,7 @@ class EditorUI {
                     textColor: this.factory.text_color,
                     align: $align.left,
                     font: $font(16),
-                    line: 1,
+                    line: 1
                 },
                 layout: (make, view) => {
                     make.left.inset(10)
@@ -222,7 +222,7 @@ class EditorUI {
                     align: $align.left,
                     text: myday.describe,
                     placeholder: $l10n("DESCRIBE"),
-                    textColor: this.factory.text_color,
+                    textColor: this.factory.text_color
                 },
                 layout: (make, view) => {
                     make.right.inset(10)
@@ -269,9 +269,9 @@ class EditorUI {
                             textColor: this.factory.text_color,
                             align: $align.left,
                             font: $font(16),
-                            line: 1,
+                            line: 1
                         },
-                        layout: (make, view) => {
+                        layout: make => {
                             make.left.inset(10)
                             make.width.equalTo(60)
                             make.height.equalTo(40)

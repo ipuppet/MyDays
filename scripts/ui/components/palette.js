@@ -144,7 +144,7 @@ class Palette {
                 this.template_display(),
                 this.template_tab(),
                 this.hsv_view("hsv_palette"),
-                this.rgb_view("rgb_palette", true),
+                this.rgb_view("rgb_palette", true)
             ]
         }
     }
@@ -165,7 +165,7 @@ class Palette {
                 this.template_slider("hsv_h", "Hue", [this.hsv[0], "°"],
                     {
                         colors: [$color("#FF0000"), $color("#FFFF00"), $color("#00FF00"), $color("#00FFFF"), $color("#0000FF"), $color("#FF00FF"), $color("#FF0000")],
-                        locations: [0.0, 0.125, 0.25, 0.5, 0.75, 0.875, 1.0],
+                        locations: [0.0, 0.125, 0.25, 0.5, 0.75, 0.875, 1.0]
                     },
                     {
                         value: this.hsv[0] / 360,
@@ -179,7 +179,7 @@ class Palette {
                             return this.hsv[0]
                         }
                     }, true),
-                this.template_slider("hsv_s", "Saturation", [this.hsv[1], "%",],
+                this.template_slider("hsv_s", "Saturation", [this.hsv[1], "%"],
                     {
                         colors: [$color("white"), $rgb(this.rgb[0], this.rgb[1], this.rgb[2])],
                         locations: [0, 1]
@@ -194,7 +194,7 @@ class Palette {
                         }
                     }
                 ),
-                this.template_slider("hsv_v", "Value", [this.hsv[2], "%",],
+                this.template_slider("hsv_v", "Value", [this.hsv[2], "%"],
                     {
                         colors: [$color("black"), $rgb(this.rgb[0], this.rgb[1], this.rgb[2])],
                         locations: [0, 1]
@@ -232,7 +232,7 @@ class Palette {
                             $rgb(0, this.rgb[1], this.rgb[2]),
                             $rgb(255, this.rgb[1], this.rgb[2])
                         ],
-                        locations: [0, 1],
+                        locations: [0, 1]
                     },
                     {
                         value: this.rgb[0] / 255,
@@ -251,7 +251,7 @@ class Palette {
                         }
                     }
                 ),
-                this.template_slider("rgb_g", "Green", [this.rgb[1], "",],
+                this.template_slider("rgb_g", "Green", [this.rgb[1], ""],
                     {
                         colors: [
                             $rgb(this.rgb[0], 0, this.rgb[2]),
@@ -276,7 +276,7 @@ class Palette {
                         }
                     }
                 ),
-                this.template_slider("rgb_b", "Blue", [this.rgb[2], "",],
+                this.template_slider("rgb_b", "Blue", [this.rgb[2], ""],
                     {
                         colors: [
                             $rgb(this.rgb[0], this.rgb[1], 0),
@@ -340,7 +340,7 @@ class Palette {
             type: "tab",
             props: {
                 items: items,
-                dynamicWidth: true,
+                dynamicWidth: true
             },
             events: {
                 changed: sender => {

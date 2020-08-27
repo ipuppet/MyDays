@@ -74,7 +74,7 @@ class TodayUI {
                     views: [
                         {
                             type: "label",
-                            props: {id: "info"},
+                            props: { id: "info" },
                             layout: (make) => {
                                 make.top.inset(10)
                                 make.left.inset(20)
@@ -82,7 +82,7 @@ class TodayUI {
                         },
                         {
                             type: "label",
-                            props: {id: "title"},
+                            props: { id: "title" },
                             layout: (make) => {
                                 make.top.inset(10)
                                 make.left.inset(20)
@@ -90,7 +90,7 @@ class TodayUI {
                         },
                         {
                             type: "label",
-                            props: {id: "describe"},
+                            props: { id: "describe" },
                             layout: (make, view) => {
                                 make.bottom.inset(10)
                                 make.left.equalTo(view.prev)
@@ -98,7 +98,7 @@ class TodayUI {
                         },
                         {
                             type: "label",
-                            props: {id: "date"},
+                            props: { id: "date" },
                             layout: (make, view) => {
                                 make.bottom.inset(10)
                                 make.centerY.equalTo(view.super)

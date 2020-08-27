@@ -6,22 +6,22 @@ class Factory extends BaseUI {
         // 视图与菜单对应关系
         this.page_index = [// 通过索引获取页面id
             "home",// 0 => 首页
-            "setting",// 1 => 设置
+            "setting"// 1 => 设置
         ]
         // 视图
         this.views = [
             this.home(),
-            this.setting(),
+            this.setting()
         ]
         // 菜单
         this.menu_data = [
             {
-                icon: {symbol: "house"},
-                title: {text: $l10n("HOME")}
+                icon: { symbol: "house" },
+                title: { text: $l10n("HOME") }
             },
             {
-                icon: {symbol: "gear"},
-                title: {text: $l10n("SETTING")}
+                icon: { symbol: "gear" },
+                title: { text: $l10n("SETTING") }
             }
         ]
     }
