@@ -351,7 +351,7 @@ class HomeUI {
                                 if (this.kernel.setting.get("general.delete_confirm")) {
                                     $ui.alert({
                                         title: $l10n("CONFIRM_DELETE_MSG"),
-                                        message: `${data.title} \n ${data.date} ${date}`,
+                                        message: `${data.title} \n ${new Date(data.date).toLocaleDateString()} ${date}`,
                                         actions: [
                                             {
                                                 title: $l10n("OK"),
