@@ -7,6 +7,8 @@
 "SUCCESS" = "成功";
 "ERROR" = "失败";
 "NONE" = "什么都没有";
+"COPY" = "复制";
+"COPY_SUCCESS" = "复制成功";
 
 "HOME" = "首页";
 
