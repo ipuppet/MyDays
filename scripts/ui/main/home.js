@@ -50,7 +50,6 @@ class HomeUI {
      * @param {*} data
      */
     static template(data) {
-        console.log(data)
         if (!data) return
         let date = HomeUI.date_span(data.date)
         return {
