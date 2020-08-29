@@ -22,7 +22,7 @@ class HomeUI {
     }
 
     static date_span(date) {
-        let span = Math.floor((new Date(date).getTime()) - (new Date().getTime()))
+        let span = date - (new Date().getTime())
         if (Math.abs(span) < 1000 * 60 * 60 * 24) {
             return {
                 color: 0,
@@ -50,6 +50,7 @@ class HomeUI {
      * @param {*} data
      */
     static template(data) {
+        console.log(data)
         if (!data) return
         let date = HomeUI.date_span(data.date)
         return {

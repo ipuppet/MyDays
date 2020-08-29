@@ -138,11 +138,11 @@ class EditorUI {
                                 color: [$("custom_days_pass").info, $("custom_days_left").info]
                             }
                         }
-                        myday.title = $("title").text.trim()
-                        myday.describe = $("describe").text.trim()
-                        myday.date = $("date").text.trim()
+                        myday.title = $("title").text
+                        myday.describe = $("describe").text
+                        myday.date = parseInt($("date").info)
                         if (myday.date === "") {
-                            myday.date = new Date().toLocaleDateString()
+                            myday.date = new Date().getTime()
                         }
                         let is_update = false
                         if (undefined !== myday.id) {
@@ -207,7 +207,7 @@ class EditorUI {
                     make.top.equalTo(view.prev.bottom).offset(20)
                 }
             },
-            {
+            { // 描述
                 type: "input",
                 props: {
                     id: "describe",
@@ -228,7 +228,7 @@ class EditorUI {
                     }
                 }
             },
-            {
+            { // 调色盘
                 type: "label",
                 props: {
                     text: "以下颜色均为浅色模式下的颜色",
@@ -251,7 +251,7 @@ class EditorUI {
                     make.height.equalTo(60)
                 }
             },
-            {
+            { // 日期
                 type: "view",
                 views: [
                     {
@@ -274,6 +274,7 @@ class EditorUI {
                         type: "text",
                         props: {
                             id: "date",
+                            info: myday.date ? myday.date : new Date().getTime(),
                             editable: false,
                             align: $align.right,
                             insets: $insets(11, 0, 0, 0),
@@ -291,12 +292,13 @@ class EditorUI {
                     {
                         type: "date-picker",
                         props: {
-                            date: myday.date ? new Date(myday.date) : new Date(),
+                            date: myday.date ? new Date(Number(myday.date)) : new Date(),
                             mode: 1
                         },
                         events: {
                             changed: sender => {
                                 $("date").text = sender.date.toLocaleDateString()
+                                $("date").info = sender.date.getTime()
                             }
                         },
                         layout: (make, view) => {

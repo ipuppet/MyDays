@@ -6,7 +6,7 @@ class Storage {
         this.iCloud_db = this.iCloud_path + "MyDays.db"
         this.iCloud_auto_db = this.iCloud_path + "auto.db"
         this.sqlite = $sqlite.open(this.local_db)
-        this.sqlite.update("CREATE TABLE IF NOT EXISTS mydays(id INTEGER PRIMARY KEY NOT NULL, title TEXT, `describe` TEXT, date TEXT, style TEXT)")
+        this.sqlite.update("CREATE TABLE IF NOT EXISTS mydays(id INTEGER PRIMARY KEY NOT NULL, title TEXT, `describe` TEXT, date INTEGER, style TEXT)")
     }
 
     parse(result) {
