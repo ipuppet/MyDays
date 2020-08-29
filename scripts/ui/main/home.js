@@ -148,7 +148,7 @@ class HomeUI {
                     }
                 ]
             },
-            {
+            { // 置顶提示字符
                 type: "label",
                 props: {
                     text: $l10n("MYDAYS_TOP"),
@@ -160,7 +160,7 @@ class HomeUI {
                     make.left.inset(20)
                 }
             },
-            {
+            { // 置顶卡片
                 type: "view",
                 props: {
                     bgcolor: $color("clear"),
@@ -338,7 +338,7 @@ class HomeUI {
                         ]
                     },
                     actions: [
-                        {
+                        { // 删除
                             title: $l10n("DELETE"),
                             color: $color("red"),
                             handler: (sender, indexPath) => {
@@ -365,7 +365,7 @@ class HomeUI {
                                 }
                             }
                         },
-                        {
+                        { // 置顶
                             title: $l10n("MYDAYS_TOP"),
                             color: $color("orange"),
                             handler: (sender, indexPath) => {
@@ -376,7 +376,7 @@ class HomeUI {
                         }
                     ]
                 },
-                events: {
+                events: { // 编辑
                     didSelect: (sender, indexPath, data) => {
                         this.editor.push(data.info, () => {
                             HomeUI.update(this.kernel.storage.all())
