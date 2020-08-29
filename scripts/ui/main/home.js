@@ -380,8 +380,10 @@ class HomeUI {
                     didSelect: (sender, indexPath, data) => {
                         this.editor.push(data.info, () => {
                             HomeUI.update(this.kernel.storage.all())
-                            if (data.info.id === $cache.get("myday_top").id) {
-                                HomeUI.update_top(data.info)
+                            if ($cache.get("myday_top")) {
+                                if (data.info.id === $cache.get("myday_top").id) {
+                                    HomeUI.update_top(data.info)
+                                }
                             }
                         })
                     },
