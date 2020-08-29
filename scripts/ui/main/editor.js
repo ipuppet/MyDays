@@ -138,6 +138,10 @@ class EditorUI {
                                 color: [$("custom_days_pass").info, $("custom_days_left").info]
                             }
                         }
+                        // TODO 循环类型的日期
+                        myday.type = {
+                            type: "default"
+                        }
                         myday.title = $("title").text
                         myday.describe = $("describe").text
                         myday.date = parseInt($("date").info)

@@ -6,7 +6,7 @@ class Storage {
         this.iCloud_db = this.iCloud_path + "MyDays.db"
         this.iCloud_auto_db = this.iCloud_path + "auto.db"
         this.sqlite = $sqlite.open(this.local_db)
-        this.sqlite.update("CREATE TABLE IF NOT EXISTS mydays(id INTEGER PRIMARY KEY NOT NULL, title TEXT, `describe` TEXT, date INTEGER, style TEXT)")
+        this.sqlite.update("CREATE TABLE IF NOT EXISTS mydays(id INTEGER PRIMARY KEY NOT NULL, title TEXT, `describe` TEXT, date INTEGER, style TEXT, type TEXT)")
     }
 
     parse(result) {
@@ -21,7 +21,8 @@ class Storage {
                 title: result.result.get("title"),
                 describe: result.result.get("describe"),
                 date: result.result.get("date"),
-                style: JSON.parse(result.result.get("style"))
+                style: JSON.parse(result.result.get("style")),
+                type: JSON.parse(result.result.get("type"))
             })
         }
         // result.result.close()
@@ -45,8 +46,8 @@ class Storage {
         let result
         myday.style = myday.style ? myday.style : []
         result = this.sqlite.update({
-            sql: "INSERT INTO mydays (title, `describe`, date, style) values(?, ?, ?, ?)",
-            args: [myday.title, myday.describe, myday.date, JSON.stringify(myday.style)]
+            sql: "INSERT INTO mydays (title, `describe`, date, style, type) values(?, ?, ?, ?, ?)",
+            args: [myday.title, myday.describe, myday.date, JSON.stringify(myday.style), JSON.stringify(myday.type)]
         })
         if (result.result) {
             if (this.setting.get("backup.auto_backup")) {
@@ -92,8 +93,8 @@ class Storage {
     update(myday) {
         let result
         result = this.sqlite.update({
-            sql: "UPDATE mydays SET title = ?, `describe` = ?, date = ?, style = ? WHERE id = ?",
-            args: [myday.title, myday.describe, myday.date, JSON.stringify(myday.style), myday.id]
+            sql: "UPDATE mydays SET title = ?, `describe` = ?, date = ?, style = ?, type = ? WHERE id = ?",
+            args: [myday.title, myday.describe, myday.date, JSON.stringify(myday.style), JSON.stringify(myday.type), myday.id]
         })
         if (result.result) {
             return true
