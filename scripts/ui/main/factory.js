@@ -14,14 +14,14 @@ class Factory extends BaseUI {
             this.setting()
         ]
         // 菜单
-        this.menu_data = [
+        this.menus = [
             {
-                icon: { symbol: "house" },
-                title: { text: $l10n("HOME") }
+                icon: ["house", "house.fill"],
+                title: $l10n("HOME")
             },
             {
-                icon: { symbol: "gear" },
-                title: { text: $l10n("SETTING") }
+                icon: "gear",
+                title: $l10n("SETTING")
             }
         ]
     }
