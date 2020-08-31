@@ -58,7 +58,7 @@ class EditorUI {
                         },
                         events: {
                             tapped: sender => {
-                                this.color.push($color(color), hex => {
+                                this.color.push($(`custom_${id}`).bgcolor, hex => {
                                     sender.bgcolor = $color(hex)
                                     sender.info = hex
                                 })
@@ -94,15 +94,17 @@ class EditorUI {
 
     push(myday = null, callback = null) {
         if (myday === null) {
+            if (!$cache.get("custom_style"))
+                $cache.set("custom_style", {
+                    title: { color: ["#333333", "secondaryText"] },
+                    describe: { color: ["#333333", "secondaryText"] },
+                    date: { color: ["red", "#00CC00"] }
+                })
             myday = {
                 title: "",
                 describe: "",
                 date: "",
-                style: {
-                    title: { color: ["#333333", "secondaryText"] },
-                    describe: { color: ["#333333", "secondaryText"] },
-                    date: { color: ["red", "##0E340"] }
-                }
+                style: $cache.get("custom_style")
             }
         }
         this.custom_style = {
@@ -138,6 +140,7 @@ class EditorUI {
                                 color: [$("custom_days_pass").info, $("custom_days_left").info]
                             }
                         }
+                        $cache.set("custom_style", myday.style)
                         // TODO 循环类型的日期
                         myday.type = {
                             type: "default"
