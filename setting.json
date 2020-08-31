@@ -63,8 +63,8 @@
         "items": [
             {
                 "icon": [
-                    "/assets/icon/github.com.ico",
-                    "clear"
+                    "/assets/icon/github.com.jpeg",
+                    "white"
                 ],
                 "title": "Github",
                 "type": "info",
