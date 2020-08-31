@@ -22,8 +22,8 @@ class List {
                 views: [{
                     type: "list",
                     props: {
-                        style: 1,
-                        bgcolor: $color("clear"),
+                        style: 2,
+                        separatorInset: $insets(0, 50, 0, 10),
                         rowHeight: 50,
                         indicatorInsets: $insets(40, 0, 50, 0),
                         header: header,

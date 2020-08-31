@@ -3,6 +3,10 @@
         "title": "GENERAL",
         "items": [
             {
+                "icon": [
+                    "trash.fill",
+                    "#FF6600"
+                ],
                 "title": "DELETE_CONFIRM",
                 "type": "switch",
                 "key": "general.delete_confirm",
@@ -24,18 +28,29 @@
         "title": "BACKUP",
         "items": [
             {
+                "icon": [
+                    "icloud.fill",
+                    "#6699FF"
+                ],
                 "title": "AUTO_BACKUP_ICLOUD",
                 "type": "switch",
                 "key": "backup.auto_backup",
                 "value": true
             },
             {
+                "icon": [
+                    "icloud.and.arrow.up.fill"
+                ],
                 "title": "BACKUP_ICLOUD",
                 "type": "script",
                 "key": "backup.backup",
                 "value": "this.backup_to_iCloud()"
             },
             {
+                "icon": [
+                    "arrow.clockwise.icloud.fill",
+                    "#FFCC33"
+                ],
                 "title": "RECOVER_ICLOUD",
                 "type": "script",
                 "key": "backup.recover",
@@ -47,12 +62,20 @@
         "title": "ABOUT",
         "items": [
             {
+                "icon": [
+                    "/assets/icon/github.com.ico",
+                    "clear"
+                ],
                 "title": "Github",
                 "type": "info",
                 "key": "about.github",
                 "value": "https://github.com/ipuppet/MyDays"
             },
             {
+                "icon": [
+                    "person.fill",
+                    "#FF9900"
+                ],
                 "title": "AUTHOR",
                 "type": "info",
                 "key": "about.author",
@@ -62,6 +85,10 @@
                 ]
             },
             {
+                "icon": [
+                    "book.fill",
+                    "#A569BD"
+                ],
                 "title": "README",
                 "type": "script",
                 "key": "about.readme",

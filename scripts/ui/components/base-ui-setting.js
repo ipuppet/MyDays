@@ -12,29 +12,69 @@ class BaseUISetting {
         return this.kernel.setting.set(key, value)
     }
 
-    create_line_label(title) {
+    create_line_label(title, icon) {
+        if (!icon[1]) icon[1] = "#00CC00"
+        // 选择是图片还是symbol
+        let icon_props = { symbol: icon[0] }
+        if (icon[0][0] === "/") icon_props = { image: $image(icon[0]) }
         return {
-            type: "label",
-            props: {
-                text: title,
-                textColor: this.factory.text_color,
-                align: $align.left
-            },
+            type: "view",
+            views: [
+                {// icon
+                    type: "view",
+                    props: {
+                        bgcolor: $color(icon[1]),
+                        cornerRadius: 5,
+                        smoothCorners: true
+                    },
+                    views: [
+                        {
+                            type: "image",
+                            props: Object.assign({
+                                tintColor: $color("white")
+                            }, icon_props),
+                            layout: (make, view) => {
+                                make.center.equalTo(view.super)
+                                make.size.equalTo(20)
+                            }
+                        },
+                    ],
+                    layout: (make, view) => {
+                        make.centerY.equalTo(view.super)
+                        make.size.equalTo(30)
+                        make.left.inset(10)
+                    }
+                },
+                {// title
+                    type: "label",
+                    props: {
+                        text: title,
+                        textColor: this.factory.text_color,
+                        align: $align.left
+                    },
+                    layout: (make, view) => {
+                        make.centerY.equalTo(view.super)
+                        make.height.equalTo(view.super)
+                        make.left.equalTo(view.prev.right).offset(10)
+                    }
+                }
+            ],
             layout: (make, view) => {
+                make.centerY.equalTo(view.super)
                 make.height.equalTo(view.super)
-                make.left.inset(15)
+                make.left.inset(0)
             }
         }
     }
 
-    create_info(title, value) {
+    create_info(icon, title, value) {
         let is_array = Array.isArray(value)
         let text = is_array ? value[0] : value
         let more_info = is_array ? value[1] : value
         return {
             type: "view",
             views: [
-                this.create_line_label(title),
+                this.create_line_label(title, icon),
                 {
                     type: "label",
                     props: {
@@ -45,7 +85,7 @@ class BaseUISetting {
                     layout: (make, view) => {
                         make.centerY.equalTo(view.prev)
                         make.right.inset(15)
-                        make.width.equalTo(200)
+                        make.width.equalTo(180)
                     }
                 },
                 {// 监听点击动作
@@ -78,15 +118,16 @@ class BaseUISetting {
         }
     }
 
-    create_switch(key, title, on = true) {
+    create_switch(key, icon, title, on = true) {
         return {
             type: "view",
             views: [
-                this.create_line_label(title),
+                this.create_line_label(title, icon),
                 {
                     type: "switch",
                     props: {
-                        on: on
+                        on: on,
+                        onColor: $color("#00CC00")
                     },
                     events: {
                         changed: sender => {
@@ -105,11 +146,11 @@ class BaseUISetting {
         }
     }
 
-    create_string(key, title, text = "") {
+    create_string(key, icon, title, text = "") {
         return {
             type: "view",
             views: [
-                this.create_line_label(title),
+                this.create_line_label(title, icon),
                 {
                     type: "button",
                     props: {
@@ -174,11 +215,11 @@ class BaseUISetting {
         }
     }
 
-    create_number(key, title, number = "") {
+    create_number(key, icon, title, number = "") {
         return {
             type: "view",
             views: [
-                this.create_line_label(title),
+                this.create_line_label(title, icon),
                 {
                     type: "label",
                     props: {
@@ -220,11 +261,11 @@ class BaseUISetting {
         }
     }
 
-    create_stepper(key, title, value = 1, min = 1, max = 12) {
+    create_stepper(key, icon, title, value = 1, min = 1, max = 12) {
         return {
             type: "view",
             views: [
-                this.create_line_label(title),
+                this.create_line_label(title, icon),
                 {
                     type: "label",
                     props: {
@@ -263,11 +304,11 @@ class BaseUISetting {
         }
     }
 
-    create_script(title, script) {
+    create_script(icon, title, script) {
         return {
             type: "view",
             views: [
-                this.create_line_label(title),
+                this.create_line_label(title, icon),
                 {
                     type: "view",
                     views: [
@@ -276,7 +317,7 @@ class BaseUISetting {
                             props: {
                                 symbol: "chevron.right",
                                 bgcolor: $color("clear"),
-                                tintColor: this.factory.text_color
+                                tintColor: $color("secondaryText")
                             },
                             layout: (make, view) => {
                                 make.centerY.equalTo(view.super)
@@ -309,14 +350,14 @@ class BaseUISetting {
         }
     }
 
-    create_tab(key, title, items, value) {
+    create_tab(key, icon, title, items, value) {
         for (let i = 0; i < items.length; i++) {
             items[i] = $l10n(items[i])
         }
         return {
             type: "view",
             views: [
-                this.create_line_label(title),
+                this.create_line_label(title, icon),
                 {
                     type: "tab",
                     props: {
@@ -373,27 +414,28 @@ class BaseUISetting {
             for (let item of section.items) {
                 let value = this.kernel.setting.get(item.key)
                 let row = null
+                if (!item.icon) item.icon = ["square.grid.2x2.fill", "#00CC00"]
                 switch (item.type) {
                     case "switch":
-                        row = this.create_switch(item.key, $l10n(item.title), value)
+                        row = this.create_switch(item.key, item.icon, $l10n(item.title), value)
                         break
                     case "stepper":
-                        row = this.create_stepper(item.key, $l10n(item.title), value, 1, 12)
+                        row = this.create_stepper(item.key, item.icon, $l10n(item.title), value, 1, 12)
                         break
                     case "string":
-                        row = this.create_string(item.key, $l10n(item.title), value)
+                        row = this.create_string(item.key, item.icon, $l10n(item.title), value)
                         break
                     case "number":
-                        row = this.create_number(item.key, $l10n(item.title), value)
+                        row = this.create_number(item.key, item.icon, $l10n(item.title), value)
                         break
                     case "info":
-                        row = this.create_info($l10n(item.title), value)
+                        row = this.create_info(item.icon, $l10n(item.title), value)
                         break
                     case "script":
-                        row = this.create_script($l10n(item.title), value)
+                        row = this.create_script(item.icon, $l10n(item.title), value)
                         break
                     case "tab":
-                        row = this.create_tab(item.key, $l10n(item.title), item.items, value)
+                        row = this.create_tab(item.key, item.icon, $l10n(item.title), item.items, value)
                         break
                     default:
                         continue
