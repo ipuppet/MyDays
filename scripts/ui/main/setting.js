@@ -53,11 +53,6 @@ class SettingUI extends BaseUISetting {
                     // 更新列表
                     let home = require("./home")
                     home.update(this.kernel.storage.all())
-                    // 弹窗提示
-                    /* $ui.alert({
-                        title: $l10n("RECOVER"),
-                        message: $l10n("RECOVER_SUCCESS")
-                    }) */
                     // 完成动画
                     this.done()
                 }
