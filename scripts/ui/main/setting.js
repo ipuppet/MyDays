@@ -17,6 +17,7 @@ class SettingUI extends BaseUISetting {
     }
 
     backup_to_iCloud() {
+        this.start()
         const backup_action = () => {
             if (this.kernel.storage.backup_to_iCloud()) {
                 $ui.alert($l10n("BACKUP_SUCCESS"))
@@ -33,6 +34,7 @@ class SettingUI extends BaseUISetting {
                         title: $l10n("OK"),
                         handler: () => {
                             backup_action()
+                            this.done()
                         }
                     },
                     { title: $l10n("CANCEL") }
@@ -44,6 +46,7 @@ class SettingUI extends BaseUISetting {
     }
 
     recover_from_iCloud() {
+        this.start()
         $drive.open({
             handler: data => {
                 if (this.kernel.storage.recover_from_iCloud(data)) {
@@ -51,10 +54,12 @@ class SettingUI extends BaseUISetting {
                     let home = require("./home")
                     home.update(this.kernel.storage.all())
                     // 弹窗提示
-                    $ui.alert({
+                    /* $ui.alert({
                         title: $l10n("RECOVER"),
                         message: $l10n("RECOVER_SUCCESS")
-                    })
+                    }) */
+                    // 完成动画
+                    this.done()
                 }
             }
         })
