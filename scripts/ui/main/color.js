@@ -9,12 +9,12 @@ class ColorUI {
     }
 
     push(color = null, callback = null) {
-        let nav_buttons = [
+        let navButtons = [
             {
                 type: "button",
                 props: {
                     symbol: "checkmark",
-                    tintColor: this.factory.text_color,
+                    tintColor: this.factory.textColor,
                     bgcolor: $color("clear")
                 },
                 layout: make => {
@@ -31,9 +31,9 @@ class ColorUI {
                 }
             }
         ]
-        this.palette.set_rgb(color.components.red, color.components.green, color.components.blue)
-        let views = [this.palette.get_view()]
-        this.factory.push(views, $l10n("BACK"), nav_buttons)
+        this.palette.setRGB(color.components.red, color.components.green, color.components.blue)
+        let views = [this.palette.getView()]
+        this.factory.push(views, $l10n("BACK"), navButtons)
     }
 }
 

@@ -23,6 +23,7 @@
 "LIST_END" = "已经到底啦~";
 "RESET_TOP" = "可能需要重新设置'置顶'";
 
+"DATA_ERROR" = "数据异常";
 "SAVE" = "保存";
 "SAVE_SUCCESS" = "保存成功";
 "SAVE_ERROR" = "保存失败";

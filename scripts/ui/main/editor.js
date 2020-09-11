@@ -7,13 +7,13 @@ class EditorUI {
         this.color = new ColorUI(this.kernel, this.factory)
     }
 
-    save(myday, is_update, callback) {
+    save(myday, isUpdate, callback) {
         if (myday.myday === "") {
-            $ui.toast($l10n("NO_myday"))
+            $ui.toast($l10n("DATA_ERROR"))
             return false
         }
         let result
-        if (is_update) {
+        if (isUpdate) {
             result = this.kernel.storage.update(myday)
         } else {
             result = this.kernel.storage.save(myday)
@@ -31,14 +31,14 @@ class EditorUI {
         }
     }
 
-    template_custom() {
+    customTemplate() {
         const template = (id, title, color) => {
             return {
                 type: "view",
                 layout: (make, view) => {
                     make.size.equalTo(55)
                     const width = $device.info.screen.width
-                    let length = Object.keys(this.custom_style).length
+                    let length = Object.keys(this.customStyle).length
                     let inset = (width - length * 55) / (length + 1)
                     if (view.prev)
                         make.left.equalTo(view.prev.right).offset(inset)
@@ -49,7 +49,7 @@ class EditorUI {
                     {
                         type: "button",
                         props: {
-                            id: `custom_${id}`,
+                            id: `custom-${id}`,
                             info: color,
                             radius: 20,
                             borderWidth: 0.3,
@@ -58,7 +58,7 @@ class EditorUI {
                         },
                         events: {
                             tapped: sender => {
-                                this.color.push($(`custom_${id}`).bgcolor, hex => {
+                                this.color.push($(`custom-${id}`).bgcolor, hex => {
                                     sender.bgcolor = $color(hex)
                                     sender.info = hex
                                 })
@@ -86,16 +86,16 @@ class EditorUI {
             }
         }
         let list = []
-        for (let item of Object.keys(this.custom_style)) {
-            list.push(template(item, this.custom_style[item][0], this.custom_style[item][1]))
+        for (let item of Object.keys(this.customStyle)) {
+            list.push(template(item, this.customStyle[item][0], this.customStyle[item][1]))
         }
         return list
     }
 
     push(myday = null, callback = null) {
         if (myday === null) {
-            if (!$cache.get("custom_style"))
-                $cache.set("custom_style", {
+            if (!$cache.get("customStyle"))
+                $cache.set("customStyle", {
                     title: { color: ["#333333", "secondaryText"] },
                     describe: { color: ["#333333", "secondaryText"] },
                     date: { color: ["red", "#00CC00"] }
@@ -104,21 +104,21 @@ class EditorUI {
                 title: "",
                 describe: "",
                 date: "",
-                style: $cache.get("custom_style")
+                style: $cache.get("customStyle")
             }
         }
-        this.custom_style = {
+        this.customStyle = {
             title: [$l10n("TITLE"), myday.style.title.color[0]],
             describe: [$l10n("DESCRIBE"), myday.style.describe.color[0]],
-            days_pass: [$l10n("DAYS_PASS"), myday.style.date.color[0]],
-            days_left: [$l10n("DAYS_LEFT"), myday.style.date.color[1]]
+            daysPass: [$l10n("DAYS_PASS"), myday.style.date.color[0]],
+            daysLeft: [$l10n("DAYS_LEFT"), myday.style.date.color[1]]
         }
-        let nav_buttons = [
+        let navButtons = [
             {
                 type: "button",
                 props: {
                     symbol: "checkmark",
-                    tintColor: this.factory.text_color,
+                    tintColor: this.factory.textColor,
                     bgcolor: $color("clear")
                 },
                 layout: make => {
@@ -129,18 +129,18 @@ class EditorUI {
                     tapped: () => {
                         myday.style = {
                             title: {
-                                color: [$("custom_title").info, "secondaryText"],
+                                color: [$("custom-title").info, "secondaryText"],
                                 font: ["default", 30]
                             },
                             describe: {
-                                color: [$("custom_describe").info, "secondaryText"],
+                                color: [$("custom-describe").info, "secondaryText"],
                                 font: ["default", 14]
                             },
                             date: {
-                                color: [$("custom_days_pass").info, $("custom_days_left").info]
+                                color: [$("custom-days-pass").info, $("custom-days-left").info]
                             }
                         }
-                        $cache.set("custom_style", myday.style)
+                        $cache.set("customStyle", myday.style)
                         // TODO 循环类型的日期
                         myday.type = {
                             type: "default"
@@ -151,11 +151,11 @@ class EditorUI {
                         if (myday.date === "") {
                             myday.date = new Date().getTime()
                         }
-                        let is_update = false
+                        let isUpdate = false
                         if (undefined !== myday.id) {
-                            is_update = true
+                            isUpdate = true
                         }
-                        this.save(myday, is_update, callback)
+                        this.save(myday, isUpdate, callback)
                     }
                 }
             }
@@ -165,7 +165,7 @@ class EditorUI {
                 type: "label",
                 props: {
                     text: $l10n("TITLE"),
-                    textColor: this.factory.text_color,
+                    textColor: this.factory.textColor,
                     align: $align.left,
                     font: $font(16),
                     line: 1
@@ -185,7 +185,7 @@ class EditorUI {
                     insets: 0,
                     text: myday.title,
                     placeholder: $l10n("TITLE"),
-                    textColor: this.factory.text_color
+                    textColor: this.factory.textColor
                 },
                 layout: (make, view) => {
                     make.right.inset(10)
@@ -202,7 +202,7 @@ class EditorUI {
                 type: "label",
                 props: {
                     text: $l10n("DESCRIBE"),
-                    textColor: this.factory.text_color,
+                    textColor: this.factory.textColor,
                     align: $align.left,
                     font: $font(16),
                     line: 1
@@ -221,7 +221,7 @@ class EditorUI {
                     align: $align.left,
                     text: myday.describe,
                     placeholder: $l10n("DESCRIBE"),
-                    textColor: this.factory.text_color
+                    textColor: this.factory.textColor
                 },
                 layout: (make, view) => {
                     make.right.inset(10)
@@ -251,7 +251,7 @@ class EditorUI {
             },
             {
                 type: "view",
-                views: this.template_custom(),
+                views: this.customTemplate(),
                 layout: (make, view) => {
                     make.right.left.inset(0)
                     make.top.equalTo(view.prev.bottom).offset(10)
@@ -265,7 +265,7 @@ class EditorUI {
                         type: "label",
                         props: {
                             text: $l10n("DATE"),
-                            textColor: this.factory.text_color,
+                            textColor: this.factory.textColor,
                             align: $align.left,
                             font: $font(16),
                             line: 1
@@ -287,7 +287,7 @@ class EditorUI {
                             insets: $insets(11, 0, 0, 0),
                             bgcolor: $color("clear"),
                             text: myday.date ? new Date(myday.date).toLocaleDateString() : "",
-                            textColor: this.factory.text_color,
+                            textColor: this.factory.textColor,
                             placeholder: $l10n("CHOOSE_DATE")
                         },
                         layout: (make, view) => {
@@ -304,8 +304,9 @@ class EditorUI {
                         },
                         events: {
                             changed: sender => {
-                                $("date").text = sender.date.toLocaleDateString()
-                                $("date").info = sender.date.getTime()
+                                let date = $("date")
+                                date.text = sender.date.toLocaleDateString()
+                                date.info = sender.date.getTime()
                             }
                         },
                         layout: (make, view) => {
@@ -322,7 +323,7 @@ class EditorUI {
                 }
             }
         ]
-        this.factory.push(views, $l10n("BACK"), nav_buttons)
+        this.factory.push(views, $l10n("BACK"), navButtons)
     }
 }
 

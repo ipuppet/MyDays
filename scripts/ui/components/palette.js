@@ -3,7 +3,7 @@ class Palette {
         this.width = $device.info.screen.width
         // 调色器离顶端的距离，因为有两个调色板所以写死高度比较方便
         // 前半部分为预览框高度，+50为选项卡高度，+25为距离选项卡再远25
-        this.palette_offset = this.width * 0.5 / 16 * 9 + 50 + 25
+        this.paletteOffset = this.width * 0.5 / 16 * 9 + 50 + 25
         this.hsv = [0, 100, 100]
         this.rgb = Palette.HSV2RGB(this.hsv[0], this.hsv[1], this.hsv[2])
     }
@@ -101,55 +101,55 @@ class Palette {
         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
     }
 
-    set_rgb(r, g, b) {
+    setRGB(r, g, b) {
         this.rgb = [r, g, b]
         this.hsv = Palette.RGB2HSV(r, g, b)
     }
 
-    set_hsv(h, s, v) {
+    setHSV(h, s, v) {
         this.hsv = [h, s, v]
         this.rgb = Palette.HSV2RGB(h, s, v)
     }
 
     display(color) {
-        $("color_display").bgcolor = color
+        $("color-display").bgcolor = color
     }
 
-    update_hsv() {
+    updateHSV() {
         this.rgb = Palette.HSV2RGB(this.hsv[0], this.hsv[1], this.hsv[2])
         // 同步更新rgb
-        $("rgb_r_slider").value = this.rgb[0] / 255
-        $("rgb_g_slider").value = this.rgb[1] / 255
-        $("rgb_b_slider").value = this.rgb[2] / 255
+        $("rgb-r-slider").value = this.rgb[0] / 255
+        $("rgb-g-slider").value = this.rgb[1] / 255
+        $("rgb-b-slider").value = this.rgb[2] / 255
         this.display($rgb(this.rgb[0], this.rgb[1], this.rgb[2]))
     }
 
-    update_rgb() {
+    updateRGB() {
         this.hsv = Palette.RGB2HSV(this.rgb[0], this.rgb[1], this.rgb[2])
         // 同步更新hsv
-        $("hsv_h_slider").value = this.hsv[0] / 360
-        $("hsv_s_slider").value = this.hsv[1] / 100
-        $("hsv_v_slider").value = this.hsv[2] / 100
+        $("hsv-h-slider").value = this.hsv[0] / 360
+        $("hsv-s-slider").value = this.hsv[1] / 100
+        $("hsv-v-slider").value = this.hsv[2] / 100
         this.display($rgb(this.rgb[0], this.rgb[1], this.rgb[2]))
     }
 
     /**
      * 获取完整视图
      */
-    get_view() {
+    getView() {
         return {
             type: "view",
             layout: $layout.fill,
             views: [
-                this.template_display(),
-                this.template_tab(),
-                this.hsv_view("hsv_palette"),
-                this.rgb_view("rgb_palette", true)
+                this.displayTemplate(),
+                this.tabTemplate(),
+                this.hsvView("hsv-palette"),
+                this.rgbView("rgb-palette", true)
             ]
         }
     }
 
-    hsv_view(id, hidden = false) {
+    hsvView(id, hidden = false) {
         return {
             props: {
                 id: id,
@@ -158,11 +158,11 @@ class Palette {
             type: "view",
             layout: (make, view) => {
                 make.width.equalTo(view.super)
-                make.top.equalTo(this.palette_offset)
+                make.top.equalTo(this.paletteOffset)
                 make.bottom.inset(0)
             },
             views: [
-                this.template_slider("hsv_h", "Hue", [this.hsv[0], "°"],
+                this.templateSlider("hsv-h", "Hue", [this.hsv[0], "°"],
                     {
                         colors: [$color("#FF0000"), $color("#FFFF00"), $color("#00FF00"), $color("#00FFFF"), $color("#0000FF"), $color("#FF00FF"), $color("#FF0000")],
                         locations: [0.0, 0.125, 0.25, 0.5, 0.75, 0.875, 1.0]
@@ -171,15 +171,15 @@ class Palette {
                         value: this.hsv[0] / 360,
                         events: value => {
                             this.hsv[0] = Math.ceil(value * 360)
-                            this.update_hsv()
+                            this.updateHSV()
                             // 改变下面两个条的颜色，此时 this.rgb 已经更新
                             let rgb = $rgb(this.rgb[0], this.rgb[1], this.rgb[2])
-                            $("hsv_s_gradient").colors = [$color("white"), rgb]
-                            $("hsv_v_gradient").colors = [$color("black"), rgb]
+                            $("hsv-s-gradient").colors = [$color("white"), rgb]
+                            $("hsv-v-gradient").colors = [$color("black"), rgb]
                             return this.hsv[0]
                         }
                     }, true),
-                this.template_slider("hsv_s", "Saturation", [this.hsv[1], "%"],
+                this.templateSlider("hsv-s", "Saturation", [this.hsv[1], "%"],
                     {
                         colors: [$color("white"), $rgb(this.rgb[0], this.rgb[1], this.rgb[2])],
                         locations: [0, 1]
@@ -188,13 +188,13 @@ class Palette {
                         value: this.hsv[1] / 100,
                         events: value => {
                             this.hsv[1] = Math.ceil(value * 100)
-                            this.update_hsv()
-                            $("hsv_h_cover_white").alpha = 1 - value
+                            this.updateHSV()
+                            $("hsv-h-cover-white").alpha = 1 - value
                             return this.hsv[1]
                         }
                     }
                 ),
-                this.template_slider("hsv_v", "Value", [this.hsv[2], "%"],
+                this.templateSlider("hsv-v", "Value", [this.hsv[2], "%"],
                     {
                         colors: [$color("black"), $rgb(this.rgb[0], this.rgb[1], this.rgb[2])],
                         locations: [0, 1]
@@ -203,8 +203,8 @@ class Palette {
                         value: this.hsv[2] / 100,
                         events: value => {
                             this.hsv[2] = Math.ceil(value * 100)
-                            this.update_hsv()
-                            $("hsv_h_cover_black").alpha = 1 - value
+                            this.updateHSV()
+                            $("hsv-h-cover-black").alpha = 1 - value
                             return this.hsv[2]
                         }
                     }
@@ -213,7 +213,7 @@ class Palette {
         }
     }
 
-    rgb_view(id, hidden = false) {
+    rgbView(id, hidden = false) {
         return {
             props: {
                 id: id,
@@ -222,11 +222,11 @@ class Palette {
             type: "view",
             layout: (make, view) => {
                 make.width.equalTo(view.super)
-                make.top.equalTo(this.palette_offset)
+                make.top.equalTo(this.paletteOffset)
                 make.bottom.inset(0)
             },
             views: [
-                this.template_slider("rgb_r", "Red", [this.rgb[0], ""],
+                this.templateSlider("rgb-r", "Red", [this.rgb[0], ""],
                     {
                         colors: [
                             $rgb(0, this.rgb[1], this.rgb[2]),
@@ -238,12 +238,12 @@ class Palette {
                         value: this.rgb[0] / 255,
                         events: value => {
                             this.rgb[0] = Math.ceil(value * 255)
-                            this.update_rgb()
-                            $("rgb_g_gradient").colors = [
+                            this.updateRGB()
+                            $("rgb-g-gradient").colors = [
                                 $rgb(this.rgb[0], 0, this.rgb[2]),
                                 $rgb(this.rgb[0], 255, this.rgb[2])
                             ]
-                            $("rgb_b_gradient").colors = [
+                            $("rgb-b-gradient").colors = [
                                 $rgb(this.rgb[0], this.rgb[1], 0),
                                 $rgb(this.rgb[0], this.rgb[1], 255)
                             ]
@@ -251,7 +251,7 @@ class Palette {
                         }
                     }
                 ),
-                this.template_slider("rgb_g", "Green", [this.rgb[1], ""],
+                this.templateSlider("rgb-g", "Green", [this.rgb[1], ""],
                     {
                         colors: [
                             $rgb(this.rgb[0], 0, this.rgb[2]),
@@ -263,12 +263,12 @@ class Palette {
                         value: this.rgb[1] / 255,
                         events: value => {
                             this.rgb[1] = Math.ceil(value * 255)
-                            this.update_rgb()
-                            $("rgb_r_gradient").colors = [
+                            this.updateRGB()
+                            $("rgb-r-gradient").colors = [
                                 $rgb(0, this.rgb[1], this.rgb[2]),
                                 $rgb(255, this.rgb[1], this.rgb[2])
                             ]
-                            $("rgb_b_gradient").colors = [
+                            $("rgb-b-gradient").colors = [
                                 $rgb(this.rgb[0], this.rgb[1], 0),
                                 $rgb(this.rgb[0], this.rgb[1], 255)
                             ]
@@ -276,7 +276,7 @@ class Palette {
                         }
                     }
                 ),
-                this.template_slider("rgb_b", "Blue", [this.rgb[2], ""],
+                this.templateSlider("rgb-b", "Blue", [this.rgb[2], ""],
                     {
                         colors: [
                             $rgb(this.rgb[0], this.rgb[1], 0),
@@ -288,12 +288,12 @@ class Palette {
                         value: this.rgb[2] / 255,
                         events: value => {
                             this.rgb[2] = Math.ceil(value * 255)
-                            this.update_rgb()
-                            $("rgb_r_gradient").colors = [
+                            this.updateRGB()
+                            $("rgb-r-gradient").colors = [
                                 $rgb(0, this.rgb[1], this.rgb[2]),
                                 $rgb(255, this.rgb[1], this.rgb[2])
                             ]
-                            $("rgb_g_gradient").colors = [
+                            $("rgb-g-gradient").colors = [
                                 $rgb(this.rgb[0], 0, this.rgb[2]),
                                 $rgb(this.rgb[0], 255, this.rgb[2])
                             ]
@@ -310,7 +310,7 @@ class Palette {
      * @param {String} id UI控件id
      * @param {$color} bgcolor 初始颜色
      */
-    template_display(id = "color_display", bgcolor = null) {
+    displayTemplate(id = "color-display", bgcolor = null) {
         if (bgcolor === null) {
             if (this.hsv) {
                 bgcolor = $color(Palette.HSV2HEX(this.hsv[0], this.hsv[1], this.hsv[2]))
@@ -335,7 +335,7 @@ class Palette {
     /**
      * 选项卡
      */
-    template_tab(items = ["HSV", "RGB"]) {
+    tabTemplate(items = ["HSV", "RGB"]) {
         return {
             type: "tab",
             props: {
@@ -345,11 +345,11 @@ class Palette {
             events: {
                 changed: sender => {
                     if (sender.index === 0) {
-                        $("hsv_palette").hidden = false
-                        $("rgb_palette").hidden = true
+                        $("hsv-palette").hidden = false
+                        $("rgb-palette").hidden = true
                     } else if (sender.index === 1) {
-                        $("hsv_palette").hidden = true
-                        $("rgb_palette").hidden = false
+                        $("hsv-palette").hidden = true
+                        $("rgb-palette").hidden = false
                     }
                 }
             },
@@ -370,13 +370,13 @@ class Palette {
      * @param {Object} slider value: 当前数值, events: value=>{ your code; return value} return的value用于显示
      * @param {*} cover 是否需要遮盖层，覆盖在渐变色条上方控制透明度和明度
      */
-    template_slider(id, title, value, gradient, slider, cover = false) {
-        const get_cover = (color, alpha) => {
+    templateSlider(id, title, value, gradient, slider, cover = false) {
+        const getCover = (color, alpha) => {
             return {
                 type: "view",
                 props: {
                     hidden: !cover, // 仅在hsv的h条上显示
-                    id: `${id}_cover_${color}`,
+                    id: `${id}-cover-${color}`,
                     radius: 2,
                     borderWidth: 0.2,
                     borderColor: $color("systemGray2"),
@@ -439,7 +439,7 @@ class Palette {
                                 {
                                     type: "label",
                                     props: {
-                                        id: `${id}_value`,
+                                        id: `${id}-value`,
                                         font: $font(13),
                                         text: value[0],
                                         align: $align.right
@@ -460,7 +460,7 @@ class Palette {
                         {
                             type: "gradient",
                             props: Object.assign({
-                                id: `${id}_gradient`,
+                                id: `${id}-gradient`,
                                 radius: 2,
                                 borderWidth: 0.2,
                                 borderColor: $color("systemGray2"),
@@ -473,12 +473,12 @@ class Palette {
                                 make.left.inset(60)
                             }
                         },
-                        get_cover("white", 1 - this.hsv[1] / 100),
-                        get_cover("black", 1 - this.hsv[2] / 100),
+                        getCover("white", 1 - this.hsv[1] / 100),
+                        getCover("black", 1 - this.hsv[2] / 100),
                         {
                             type: "slider",
                             props: {
-                                id: `${id}_slider`,
+                                id: `${id}-slider`,
                                 minColor: $color("clear"),
                                 maxColor: $color("clear"),
                                 value: slider.value
@@ -489,7 +489,7 @@ class Palette {
                             },
                             events: {
                                 changed: sender => {
-                                    $(`${id}_value`).text = slider.events(sender.value)
+                                    $(`${id}-value`).text = slider.events(sender.value)
                                 }
                             }
                         }

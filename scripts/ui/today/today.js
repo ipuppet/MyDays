@@ -5,8 +5,8 @@ class TodayUI {
         this.kernel = kernel
     }
 
-    get_top_view() {
-        let myday = HomeUI.template_top()
+    getTopView() {
+        let myday = HomeUI.topTemplate()
         if (!myday) $ui.render({
             views: [{
                 type: "label",
@@ -31,7 +31,7 @@ class TodayUI {
             views: [
                 {
                     type: "label",
-                    props: myday.date_raw,
+                    props: myday.dateRaw,
                     layout: make => {
                         make.top.inset(5)
                         make.right.inset(20)
@@ -48,7 +48,7 @@ class TodayUI {
                 },
                 {
                     type: "label",
-                    props: myday.date_flag,
+                    props: myday.dateFlag,
                     layout: (make, view) => {
                         make.centerY.equalTo(view.super).offset(-9)
                         make.left.equalTo(view.prev.right).offset(5)
@@ -80,11 +80,11 @@ class TodayUI {
         }
     }
 
-    get_list_view() {
+    getListView() {
         return {
             type: "list",
             props: {
-                data: HomeUI.template_list(this.kernel.storage.all()),
+                data: HomeUI.templateList(this.kernel.storage.all()),
                 id: "mydays",
                 selectable: false,
                 rowHeight: 80,
@@ -131,8 +131,8 @@ class TodayUI {
     }
 
     render() {
-        let mode = this.kernel.setting.get("general.today_mode")
-        let view = mode ? this.get_list_view() : this.get_top_view()
+        let mode = this.kernel.setting.get("general.todayMode")
+        let view = mode ? this.getListView() : this.getTopView()
         $ui.render({
             views: [view]
         })

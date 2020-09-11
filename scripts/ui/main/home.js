@@ -8,20 +8,20 @@ class HomeUI {
     }
 
     static update(data) {
-        $("mydays").data = HomeUI.template_list(data)
+        $("mydays").data = HomeUI.templateList(data)
     }
 
-    static update_top(data) {
-        $cache.set("myday_top", data)
+    static updateTop(data) {
+        $cache.set("mydayTop", data)
         let template = HomeUI.template(data)
-        $("myday_top_date_raw").props = template.date_raw
-        $("myday_top_title").props = template.title
-        $("myday_top_date_flag").props = template.date_flag
-        $("myday_top_describe").props = template.describe
-        $("myday_top_date").props = template.date
+        $("myday-top-date-raw").props = template.dateRaw
+        $("myday-top-title").props = template.title
+        $("myday-top-date-flag").props = template.dateFlag
+        $("myday-top-describe").props = template.describe
+        $("myday-top-date").props = template.date
     }
 
-    static date_span(date) {
+    static dateSpan(date) {
         let span = date - (new Date().getTime())
         if (Math.abs(span) < 1000 * 60 * 60 * 24) {
             return {
@@ -51,10 +51,10 @@ class HomeUI {
      */
     static template(data) {
         if (!data) return
-        let date = HomeUI.date_span(data.date)
+        let date = HomeUI.dateSpan(data.date)
         return {
             info: data,
-            date_raw: {
+            dateRaw: {
                 text: new Date(data.date).toLocaleDateString(),
                 font: $font(12),
                 textColor: $color("secondaryText")
@@ -64,7 +64,7 @@ class HomeUI {
                 font: $font(30),
                 textColor: $color(data.style.title.color[0], data.style.title.color[1])
             },
-            date_flag: {
+            dateFlag: {
                 text: date.flag,
                 font: $font(16)
             },
@@ -81,7 +81,7 @@ class HomeUI {
         }
     }
 
-    static template_list(data) {
+    static templateList(data) {
         let result = []
         let index = 0
         for (let myday of data) {
@@ -92,11 +92,11 @@ class HomeUI {
         return result
     }
 
-    static template_top() {
+    static topTemplate() {
         let data = {}
-        if ($cache.get("myday_top")) {
+        if ($cache.get("mydayTop")) {
             try {
-                data = HomeUI.template($cache.get("myday_top"))
+                data = HomeUI.template($cache.get("mydayTop"))
             } catch (error) {
                 setTimeout(() => {
                     $ui.toast($l10n("RESET_TOP"))
@@ -106,8 +106,8 @@ class HomeUI {
         return data
     }
 
-    get_views() {
-        let myday_top = HomeUI.template_top()
+    getViews() {
+        let mydayTop = HomeUI.topTemplate()
         return [
             { // nav
                 type: "view",
@@ -131,7 +131,7 @@ class HomeUI {
                         type: "button",
                         props: {
                             symbol: "plus",
-                            tintColor: this.factory.text_color,
+                            tintColor: this.factory.textColor,
                             bgcolor: $color("clear")
                         },
                         layout: make => {
@@ -177,7 +177,7 @@ class HomeUI {
                 views: [
                     {
                         type: "label",
-                        props: Object.assign({ id: "myday_top_date_raw" }, myday_top.date_raw),
+                        props: Object.assign({ id: "myday-top-date-raw" }, mydayTop.dateRaw),
                         layout: make => {
                             make.top.inset(5)
                             make.right.inset(20)
@@ -185,7 +185,7 @@ class HomeUI {
                     },
                     {
                         type: "label",
-                        props: Object.assign({ id: "myday_top_title" }, myday_top.title),
+                        props: Object.assign({ id: "myday-top-title" }, mydayTop.title),
                         layout: (make, view) => {
                             make.centerY.equalTo(view.super).offset(-15)
                             make.left.inset(20)
@@ -194,7 +194,7 @@ class HomeUI {
                     },
                     {
                         type: "label",
-                        props: Object.assign({ id: "myday_top_date_flag" }, myday_top.date_flag),
+                        props: Object.assign({ id: "myday-top-date-flag" }, mydayTop.dateFlag),
                         layout: (make, view) => {
                             make.centerY.equalTo(view.super).offset(-9)
                             make.left.equalTo(view.prev.right).offset(5)
@@ -203,7 +203,7 @@ class HomeUI {
                     },
                     {
                         type: "label",
-                        props: Object.assign({ id: "myday_top_describe" }, myday_top.describe),
+                        props: Object.assign({ id: "myday-top-describe" }, mydayTop.describe),
                         layout: (make, view) => {
                             make.top.equalTo(view.prev.bottom).offset(10)
                             make.left.equalTo(20)
@@ -212,22 +212,22 @@ class HomeUI {
                     {
                         type: "button",
                         props: Object.assign({
-                            id: "myday_top_date",
+                            id: "myday-top-date",
                             contentEdgeInsets: 5
-                        }, myday_top.date),
+                        }, mydayTop.date),
                         layout: (make, view) => {
                             make.centerY.equalTo(view.super)
                             make.right.inset(20)
                         },
                         events: {
                             tapped: () => {
-                                if (!this.home_top_tapped) {
-                                    this.home_top_tapped = 1
+                                if (!this.homeTopTapped) {
+                                    this.homeTopTapped = 1
                                 } else {
-                                    this.home_top_tapped++
+                                    this.homeTopTapped++
                                 }
-                                if (this.home_top_tapped >= 3) {
-                                    this.home_top_tapped = 0
+                                if (this.homeTopTapped >= 3) {
+                                    this.homeTopTapped = 0
                                     $ui.alert("再点就点坏啦！😖")
                                 }
                             }
@@ -238,7 +238,7 @@ class HomeUI {
             { // 列表
                 type: "list",
                 props: {
-                    data: HomeUI.template_list(this.kernel.storage.all()),
+                    data: HomeUI.templateList(this.kernel.storage.all()),
                     id: "mydays",
                     indicatorInsets: $insets(0, 0, 50, 0),
                     header: {
@@ -291,7 +291,7 @@ class HomeUI {
                             },
                             {
                                 type: "label",
-                                props: { id: "date_raw" },
+                                props: { id: "date-raw" },
                                 layout: make => {
                                     make.top.inset(5)
                                     make.right.inset(20)
@@ -308,7 +308,7 @@ class HomeUI {
                             },
                             {
                                 type: "label",
-                                props: { id: "date_flag" },
+                                props: { id: "date-flag" },
                                 layout: (make, view) => {
                                     make.centerY.equalTo(view.super).offset(-9)
                                     make.left.equalTo(view.prev.right).offset(5)
@@ -344,24 +344,24 @@ class HomeUI {
                             handler: (sender, indexPath) => {
                                 let data = sender.object(indexPath).info
                                 let date = sender.object(indexPath).date.title
-                                let delete_action = () => {
+                                let deleteAction = () => {
                                     if (this.kernel.storage.delete(data.id))
                                         sender.delete(indexPath)
                                 }
-                                if (this.kernel.setting.get("general.delete_confirm")) {
+                                if (this.kernel.setting.get("general.deleteConfirm")) {
                                     $ui.alert({
                                         title: $l10n("CONFIRM_DELETE_MSG"),
                                         message: `${data.title} \n ${new Date(data.date).toLocaleDateString()} ${date}`,
                                         actions: [
                                             {
                                                 title: $l10n("OK"),
-                                                handler: delete_action
+                                                handler: deleteAction
                                             },
                                             { title: $l10n("CANCEL") }
                                         ]
                                     })
                                 } else {
-                                    delete_action()
+                                    deleteAction()
                                 }
                             }
                         },
@@ -371,7 +371,7 @@ class HomeUI {
                             handler: (sender, indexPath) => {
                                 let data = sender.object(indexPath).info
                                 data["index"] = indexPath.item
-                                HomeUI.update_top(data)
+                                HomeUI.updateTop(data)
                             }
                         }
                     ]
@@ -380,9 +380,9 @@ class HomeUI {
                     didSelect: (sender, indexPath, data) => {
                         this.editor.push(data.info, () => {
                             HomeUI.update(this.kernel.storage.all())
-                            if ($cache.get("myday_top")) {
-                                if (data.info.id === $cache.get("myday_top").id) {
-                                    HomeUI.update_top(data.info)
+                            if ($cache.get("mydayTop")) {
+                                if (data.info.id === $cache.get("mydayTop").id) {
+                                    HomeUI.updateTop(data.info)
                                 }
                             }
                         })
