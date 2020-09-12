@@ -124,7 +124,7 @@ class BaseUI {
                             type: "view",
                             views: views,
                             layout: (make, view) => {
-                                make.top.equalTo(view.prev).offset(30)
+                                make.top.equalTo(view.prev).offset(40)
                                 make.width.equalTo(view.super)
                                 make.bottom.equalTo(view.super.safeAreaBottom)
                             }
