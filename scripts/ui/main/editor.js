@@ -162,165 +162,182 @@ class EditorUI {
         ]
         let views = [
             {
-                type: "label",
-                props: {
-                    text: $l10n("TITLE"),
-                    textColor: this.factory.textColor,
-                    align: $align.left,
-                    font: $font(16),
-                    line: 1
-                },
-                layout: make => {
-                    make.left.inset(10)
-                    make.width.equalTo(60)
-                    make.height.equalTo(40)
-                    make.top.equalTo(40)
-                }
-            },
-            {
-                type: "input",
-                props: {
-                    id: "title",
-                    align: $align.left,
-                    insets: 0,
-                    text: myday.title,
-                    placeholder: $l10n("TITLE"),
-                    textColor: this.factory.textColor
-                },
-                layout: (make, view) => {
-                    make.right.inset(10)
-                    make.left.inset(60)
-                    make.height.top.equalTo(view.prev)
-                },
-                events: {
-                    returned: sender => {
-                        sender.blur()
-                    }
-                }
-            },
-            {
-                type: "label",
-                props: {
-                    text: $l10n("DESCRIBE"),
-                    textColor: this.factory.textColor,
-                    align: $align.left,
-                    font: $font(16),
-                    line: 1
-                },
-                layout: (make, view) => {
-                    make.left.inset(10)
-                    make.width.equalTo(60)
-                    make.height.equalTo(view.prev)
-                    make.top.equalTo(view.prev.bottom).offset(20)
-                }
-            },
-            { // 描述
-                type: "input",
-                props: {
-                    id: "describe",
-                    align: $align.left,
-                    text: myday.describe,
-                    placeholder: $l10n("DESCRIBE"),
-                    textColor: this.factory.textColor
-                },
-                layout: (make, view) => {
-                    make.right.inset(10)
-                    make.left.inset(60)
-                    make.height.equalTo(view.prev)
-                    make.top.equalTo(view.prev)
-                },
-                events: {
-                    returned: sender => {
-                        sender.blur()
-                    }
-                }
-            },
-            { // 调色盘
-                type: "label",
-                props: {
-                    text: "以下颜色均为浅色模式下的颜色",
-                    font: $font(12),
-                    align: $align.center,
-                    textColor: $color("secondaryText")
-                },
-                layout: (make, view) => {
-                    make.left.inset(10)
-                    make.right.inset(0)
-                    make.top.equalTo(view.prev.bottom).offset(25)
-                }
-            },
-            {
-                type: "view",
-                views: this.customTemplate(),
-                layout: (make, view) => {
-                    make.right.left.inset(0)
-                    make.top.equalTo(view.prev.bottom).offset(10)
-                    make.height.equalTo(60)
-                }
-            },
-            { // 日期
-                type: "view",
+                type: "scroll",
+                props: { contentSize: $size(0, 520) },
+                layout: $layout.fill,
                 views: [
                     {
-                        type: "label",
-                        props: {
-                            text: $l10n("DATE"),
-                            textColor: this.factory.textColor,
-                            align: $align.left,
-                            font: $font(16),
-                            line: 1
-                        },
-                        layout: make => {
-                            make.left.inset(10)
-                            make.width.equalTo(60)
-                            make.height.equalTo(40)
-                            make.top.equalTo(0)
-                        }
-                    },
-                    {
-                        type: "text",
-                        props: {
-                            id: "date",
-                            info: myday.date ? myday.date : new Date().getTime(),
-                            editable: false,
-                            align: $align.right,
-                            insets: $insets(11, 0, 0, 0),
-                            bgcolor: $color("clear"),
-                            text: myday.date ? new Date(myday.date).toLocaleDateString() : "",
-                            textColor: this.factory.textColor,
-                            placeholder: $l10n("CHOOSE_DATE")
-                        },
+                        type: "view",
                         layout: (make, view) => {
-                            make.right.inset(10)
-                            make.left.inset(60)
-                            make.top.height.equalTo(view.prev)
-                        }
-                    },
-                    {
-                        type: "date-picker",
-                        props: {
-                            date: myday.date ? new Date(Number(myday.date)) : new Date(),
-                            mode: 1
+                            make.width.equalTo(view.super)
+                            make.height.equalTo(520)
                         },
-                        events: {
-                            changed: sender => {
-                                let date = $("date")
-                                date.text = sender.date.toLocaleDateString()
-                                date.info = sender.date.getTime()
+                        views: [
+                            {
+                                type: "label",
+                                props: {
+                                    text: $l10n("TITLE"),
+                                    textColor: this.factory.textColor,
+                                    align: $align.left,
+                                    font: $font(16),
+                                    line: 1
+                                },
+                                layout: make => {
+                                    make.left.inset(10)
+                                    make.width.equalTo(60)
+                                    make.height.equalTo(40)
+                                    make.top.equalTo(40)
+                                }
+                            },
+                            {
+                                type: "input",
+                                props: {
+                                    id: "title",
+                                    align: $align.left,
+                                    insets: 0,
+                                    text: myday.title,
+                                    placeholder: $l10n("TITLE"),
+                                    textColor: this.factory.textColor
+                                },
+                                layout: (make, view) => {
+                                    make.right.inset(10)
+                                    make.left.inset(60)
+                                    make.height.top.equalTo(view.prev)
+                                },
+                                events: {
+                                    returned: sender => {
+                                        sender.blur()
+                                    }
+                                }
+                            },
+                            {
+                                type: "label",
+                                props: {
+                                    text: $l10n("DESCRIBE"),
+                                    textColor: this.factory.textColor,
+                                    align: $align.left,
+                                    font: $font(16),
+                                    line: 1
+                                },
+                                layout: (make, view) => {
+                                    make.left.inset(10)
+                                    make.width.equalTo(60)
+                                    make.height.equalTo(view.prev)
+                                    make.top.equalTo(view.prev.bottom).offset(20)
+                                }
+                            },
+                            { // 描述
+                                type: "input",
+                                props: {
+                                    id: "describe",
+                                    align: $align.left,
+                                    text: myday.describe,
+                                    placeholder: $l10n("DESCRIBE"),
+                                    textColor: this.factory.textColor
+                                },
+                                layout: (make, view) => {
+                                    make.right.inset(10)
+                                    make.left.inset(60)
+                                    make.height.equalTo(view.prev)
+                                    make.top.equalTo(view.prev)
+                                },
+                                events: {
+                                    returned: sender => {
+                                        sender.blur()
+                                    }
+                                }
+                            },
+                            { // 调色盘
+                                type: "label",
+                                props: {
+                                    text: "以下颜色均为浅色模式下的颜色",
+                                    font: $font(12),
+                                    align: $align.center,
+                                    textColor: $color("secondaryText")
+                                },
+                                layout: (make, view) => {
+                                    make.left.inset(10)
+                                    make.right.inset(0)
+                                    make.top.equalTo(view.prev.bottom).offset(25)
+                                }
+                            },
+                            {
+                                type: "view",
+                                views: this.customTemplate(),
+                                layout: (make, view) => {
+                                    make.right.left.inset(0)
+                                    make.top.equalTo(view.prev.bottom).offset(10)
+                                    make.height.equalTo(60)
+                                }
+                            },
+                            { // 日期
+                                type: "view",
+                                views: [
+                                    {
+                                        type: "label",
+                                        props: {
+                                            text: $l10n("DATE"),
+                                            textColor: this.factory.textColor,
+                                            align: $align.left,
+                                            font: $font(16),
+                                            line: 1
+                                        },
+                                        layout: make => {
+                                            make.left.inset(10)
+                                            make.width.equalTo(60)
+                                            make.height.equalTo(40)
+                                            make.top.equalTo(0)
+                                        }
+                                    },
+                                    {
+                                        type: "text",
+                                        props: {
+                                            id: "date",
+                                            info: myday.date ? myday.date : new Date().getTime(),
+                                            editable: false,
+                                            align: $align.right,
+                                            insets: $insets(11, 0, 0, 0),
+                                            bgcolor: $color("clear"),
+                                            text: myday.date ? new Date(myday.date).toLocaleDateString() : "",
+                                            textColor: this.factory.textColor,
+                                            placeholder: $l10n("CHOOSE_DATE")
+                                        },
+                                        layout: (make, view) => {
+                                            make.right.inset(10)
+                                            make.left.inset(60)
+                                            make.top.height.equalTo(view.prev)
+                                        }
+                                    },
+                                    {
+                                        type: "date-picker",
+                                        props: {
+                                            date: myday.date ? new Date(Number(myday.date)) : new Date(),
+                                            mode: 1
+                                        },
+                                        events: {
+                                            changed: sender => {
+                                                let date = $("date")
+                                                date.text = sender.date.toLocaleDateString()
+                                                date.info = sender.date.getTime()
+                                            }
+                                        },
+                                        layout: (make, view) => {
+                                            make.width.equalTo(300)
+                                            make.centerX.equalTo(view.super)
+                                            make.top.equalTo(view.prev.bottom)
+                                            make.height.equalTo(180)
+                                        }
+                                    }
+                                ],
+                                layout: (make, view) => {
+                                    make.right.left.inset(0)
+                                    make.top.equalTo(view.prev.bottom).offset(5)
+                                    make.height.equalTo(220)
+                                }
                             }
-                        },
-                        layout: (make, view) => {
-                            make.right.left.inset(0)
-                            make.top.equalTo(view.prev.bottom)
-                            make.height.equalTo(180)
-                        }
+                        ]
                     }
-                ],
-                layout: (make, view) => {
-                    make.right.left.inset(0)
-                    make.top.equalTo(view.prev.bottom).offset(5)
-                    make.height.equalTo(220)
-                }
+                ]
             }
         ]
         this.factory.push(views, $l10n("BACK"), navButtons)
