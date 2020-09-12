@@ -24,6 +24,9 @@ class BaseUI {
                 let isLargeScreen = this.isLargeScreen()
                 if (isLargeScreen) {
                     make.bottom.equalTo(-20)
+                    if (!$device.isIphoneX) {
+                        make.top.equalTo(view.super.safeAreaBottom).offset(-70)
+                    }
                 } else {
                     make.bottom.equalTo(0)
                 }
