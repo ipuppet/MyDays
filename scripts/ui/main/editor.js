@@ -32,62 +32,20 @@ class EditorUI {
     }
 
     customTemplate() {
-        const template = (id, title, color) => {
+        const template = (title, color) => {
             return {
-                type: "view",
-                layout: (make, view) => {
-                    make.size.equalTo(55)
-                    const width = $device.info.screen.width
-                    let length = Object.keys(this.customStyle).length
-                    let inset = (width - length * 55) / (length + 1)
-                    if (view.prev)
-                        make.left.equalTo(view.prev.right).offset(inset)
-                    else
-                        make.left.inset(inset)
+                customColorCircle: {
+                    info: color,
+                    bgcolor: $color(color)
                 },
-                views: [
-                    {
-                        type: "button",
-                        props: {
-                            id: `custom-${id}`,
-                            info: color,
-                            radius: 20,
-                            borderWidth: 0.3,
-                            borderColor: $color("lightGray"),
-                            bgcolor: $color(color)
-                        },
-                        events: {
-                            tapped: sender => {
-                                this.color.push($(`custom-${id}`).bgcolor, hex => {
-                                    sender.bgcolor = $color(hex)
-                                    sender.info = hex
-                                })
-                            }
-                        },
-                        layout: (make, view) => {
-                            make.centerX.equalTo(view.super)
-                            make.top.inset(0)
-                            make.size.equalTo(40)
-                        }
-                    },
-                    {
-                        type: "label",
-                        props: {
-                            text: title,
-                            font: $font(12),
-                            textColor: $color("primaryText", "secondaryText")
-                        },
-                        layout: (make, view) => {
-                            make.centerX.equalTo(view.super)
-                            make.top.equalTo(view.prev.bottom)
-                        }
-                    }
-                ]
+                customColorTitle: {
+                    text: title
+                }
             }
         }
         let list = []
         for (let item of Object.keys(this.customStyle)) {
-            list.push(template(item, this.customStyle[item][0], this.customStyle[item][1]))
+            list.push(template(this.customStyle[item][0], this.customStyle[item][1]))
         }
         return list
     }
@@ -127,17 +85,20 @@ class EditorUI {
                 },
                 events: {
                     tapped: () => {
+                        const getCustomColor = (index) => {
+                            return $("custom-color").object($indexPath(0, index)).customColorCircle.info
+                        }
                         myday.style = {
                             title: {
-                                color: [$("custom-title").info, "secondaryText"],
+                                color: [getCustomColor(0), "secondaryText"],
                                 font: ["default", 30]
                             },
                             describe: {
-                                color: [$("custom-describe").info, "secondaryText"],
+                                color: [getCustomColor(1), "secondaryText"],
                                 font: ["default", 14]
                             },
                             date: {
-                                color: [$("custom-days-pass").info, $("custom-days-left").info]
+                                color: [getCustomColor(2), getCustomColor(3)]
                             }
                         }
                         $cache.set("customStyle", myday.style)
@@ -262,12 +223,74 @@ class EditorUI {
                                 }
                             },
                             {
-                                type: "view",
-                                views: this.customTemplate(),
+                                type: "matrix",
+                                props: {
+                                    id: "custom-color",
+                                    columns: this.customStyle.length,
+                                    autoItemSize: true,
+                                    template: [
+                                        {
+                                            type: "view",
+                                            layout: make => {
+                                                make.size.equalTo(55)
+                                            },
+                                            views: [
+                                                {
+                                                    type: "view",
+                                                    props: {
+                                                        id: "customColorCircle",
+                                                        radius: 20,
+                                                        borderWidth: 0.3,
+                                                        borderColor: $color("lightGray")
+                                                    },
+                                                    layout: (make, view) => {
+                                                        make.centerX.equalTo(view.super)
+                                                        make.top.inset(0)
+                                                        make.size.equalTo(40)
+                                                    }
+                                                },
+                                                {
+                                                    type: "label",
+                                                    props: {
+                                                        id: "customColorTitle",
+                                                        font: $font(12),
+                                                        textColor: $color("primaryText", "secondaryText")
+                                                    },
+                                                    layout: (make, view) => {
+                                                        make.centerX.equalTo(view.super)
+                                                        make.top.equalTo(view.prev.bottom)
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    data: this.customTemplate()
+                                },
+                                events: {
+                                    didSelect: (sender, indexPath, data) => {
+                                        this.color.push(data.customColorCircle.bgcolor, hex => {
+                                            let title = data.customColorTitle.text
+                                            sender.delete(indexPath)
+                                            sender.insert({
+                                                indexPath: indexPath,
+                                                value: {
+                                                    customColorCircle: {
+                                                        info: hex,
+                                                        bgcolor: $color(hex)
+                                                    },
+                                                    customColorTitle: {
+                                                        text: title
+                                                    }
+                                                }
+                                            })
+                                        })
+                                    }
+                                },
                                 layout: (make, view) => {
-                                    make.right.left.inset(0)
+                                    make.right.left.equalTo(view.super.safeArea).offset(10)
+                                    make.width.equalTo(view.super).offset(20)
                                     make.top.equalTo(view.prev.bottom).offset(10)
-                                    make.height.equalTo(60)
+                                    make.height.equalTo(70)
                                 }
                             },
                             { // 日期
@@ -337,7 +360,12 @@ class EditorUI {
                             }
                         ]
                     }
-                ]
+                ],
+                events: {
+                    layoutSubviews: () => {
+                        $("custom-color").reload()
+                    }
+                }
             }
         ]
         this.factory.push(views, $l10n("BACK"), navButtons)

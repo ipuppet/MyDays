@@ -1,9 +1,8 @@
 class Palette {
     constructor() {
-        this.width = $device.info.screen.width
         // 调色器离顶端的距离，因为有两个调色板所以写死高度比较方便
         // 前半部分为预览框高度，+50为选项卡高度，+25为距离选项卡再远25
-        this.paletteOffset = this.width * 0.5 / 16 * 9 + 50 + 25
+        this.paletteOffset = $device.info.screen.width * 0.5 / 16 * 9 + 50 + 25
         this.hsv = [0, 100, 100]
         this.rgb = Palette.HSV2RGB(this.hsv[0], this.hsv[1], this.hsv[2])
     }
@@ -138,13 +137,37 @@ class Palette {
      */
     getView() {
         return {
-            type: "view",
+            type: "scroll",
+            props: { contentSize: $size(0, 400) },
             layout: $layout.fill,
+            events: {
+                layoutSubviews: () => {
+                    let paletteContent = $("paletteContent")
+                    if (paletteContent) paletteContent.remove()
+                    $("paletteMainView").add({
+                        type: "view",
+                        props: { id: "paletteContent" },
+                        layout: (make, view) => {
+                            make.edges.equalTo(view.super.safeArea)
+                        },
+                        views: [
+                            this.displayTemplate(),
+                            this.tabTemplate(),
+                            this.hsvView("hsv-palette"),
+                            this.rgbView("rgb-palette", true)
+                        ]
+                    })
+                }
+            },
             views: [
-                this.displayTemplate(),
-                this.tabTemplate(),
-                this.hsvView("hsv-palette"),
-                this.rgbView("rgb-palette", true)
+                {
+                    type: "view",
+                    props: { id: "paletteMainView" },
+                    views: [],
+                    layout: (make, view) => {
+                        make.size.equalTo(view.super.safeArea)
+                    }
+                }
             ]
         }
     }
@@ -325,7 +348,8 @@ class Palette {
                 bgcolor: bgcolor
             },
             layout: (make, view) => {
-                make.size.equalTo($size(this.width * 0.5, this.width * 0.5 / 16 * 9))
+                let width = 200
+                make.size.equalTo($size(width, width * 9 / 16))
                 make.centerX.equalTo(view.super)
                 make.top.inset(20)
             }
@@ -385,7 +409,7 @@ class Palette {
                 },
                 layout: (make, view) => {
                     make.centerY.equalTo(view.super)
-                    make.size.equalTo($size(this.width - 80, 4))
+                    make.size.equalTo($size($device.info.screen.width - 80, 4))
                     make.left.inset(60)
                 }
             }
@@ -469,7 +493,7 @@ class Palette {
                             }, gradient),
                             layout: (make, view) => {
                                 make.centerY.equalTo(view.super)
-                                make.size.equalTo($size(this.width - 80, 4))
+                                make.size.equalTo($size($device.info.screen.width - 80, 4))
                                 make.left.inset(60)
                             }
                         },
