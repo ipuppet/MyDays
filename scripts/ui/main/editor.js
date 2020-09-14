@@ -227,6 +227,7 @@ class EditorUI {
                                 props: {
                                     id: "custom-color",
                                     columns: this.customStyle.length,
+                                    scrollEnabled: false,
                                     autoItemSize: true,
                                     template: [
                                         {

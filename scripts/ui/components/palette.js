@@ -142,21 +142,32 @@ class Palette {
             layout: $layout.fill,
             events: {
                 layoutSubviews: () => {
-                    let paletteContent = $("paletteContent")
-                    if (paletteContent) paletteContent.remove()
-                    $("paletteMainView").add({
-                        type: "view",
-                        props: { id: "paletteContent" },
-                        layout: (make, view) => {
-                            make.edges.equalTo(view.super.safeArea)
-                        },
-                        views: [
-                            this.displayTemplate(),
-                            this.tabTemplate(),
-                            this.hsvView("hsv-palette"),
-                            this.rgbView("rgb-palette", true)
-                        ]
-                    })
+                    const addView = () => {
+                        let paletteContent = $("paletteContent")
+                        if (paletteContent) paletteContent.remove()
+                        $("paletteMainView").add({
+                            type: "view",
+                            props: { id: "paletteContent" },
+                            layout: (make, view) => {
+                                make.edges.equalTo(view.super.safeArea)
+                            },
+                            views: [
+                                this.displayTemplate(),
+                                this.tabTemplate(),
+                                this.hsvView("hsv-palette"),
+                                this.rgbView("rgb-palette", true)
+                            ]
+                        })
+                    }
+                    if (!this.orientation) {
+                        this.orientation = $device.info.screen.orientation
+                        addView()
+                        return
+                    }
+                    if (this.orientation !== $device.info.screen.orientation) {
+                        this.orientation = $device.info.screen.orientation
+                        addView()
+                    }
                 }
             },
             views: [
