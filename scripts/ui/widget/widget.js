@@ -1,20 +1,35 @@
-let HomeUI = require("/scripts/ui/main/home")
-
 class WidgetUI {
     constructor(kernel) {
         this.kernel = kernel
     }
 
     localizedWeek(index) {
-        let weekday = []
-        weekday[0] = $l10n("SUNDAY")
-        weekday[1] = $l10n("MONDAY")
-        weekday[2] = $l10n("TUESDAY")
-        weekday[3] = $l10n("WEDNESDAY")
-        weekday[4] = $l10n("THURSDAY")
-        weekday[5] = $l10n("FRIDAY")
-        weekday[6] = $l10n("SATURDAY")
-        return weekday[index]
+        let week = []
+        week[0] = $l10n("SUNDAY")
+        week[1] = $l10n("MONDAY")
+        week[2] = $l10n("TUESDAY")
+        week[3] = $l10n("WEDNESDAY")
+        week[4] = $l10n("THURSDAY")
+        week[5] = $l10n("FRIDAY")
+        week[6] = $l10n("SATURDAY")
+        return week[index]
+    }
+
+    localizedMonth(index) {
+        let month = []
+        month[0] = $l10n("JANUARY")
+        month[1] = $l10n("FEBRUARY")
+        month[2] = $l10n("MARCH")
+        month[3] = $l10n("APRIL")
+        month[4] = $l10n("MAY")
+        month[5] = $l10n("JUNE")
+        month[6] = $l10n("JULY")
+        month[7] = $l10n("AUGUST")
+        month[8] = $l10n("SEPTEMBER")
+        month[9] = $l10n("OCTOBER")
+        month[10] = $l10n("NOVEMBER")
+        month[11] = $l10n("DECEMBER")
+        return month[index] + $l10n("MONTH")
     }
 
     getCalendar() {
@@ -30,46 +45,150 @@ class WidgetUI {
             for (let day = 0; day <= 6; day++) {
                 if (day === firstDay) firstDay = 0
                 // 只有当firstDay为0时才开始放入数据，之前的用-1补位
-                week.push(firstDay === 0 ? (date > dates ? -1 : date) : -1)
+                week.push(firstDay === 0 ? (date > dates ? -1 : { date: date, day: day }) : -1)
                 if (firstDay === 0) date++
             }
             calendar.push(week)
         }
         return {
+            year: year,
+            month: month,
             calendar: calendar,
             date: dateNow,
         }
     }
 
-    calendarView(ctx) {
-        let calendarInfo = this.getCalendar()
-        let calendar = calendarInfo.calendar
-        let lines = []
-        for (let line of calendar) {
-            for (let date of line) {
-                lines.push({
+    formatCalendar(calendarInfo) {
+        const template = (text, props = {}) => {
+            return {
+                type: "hstack",
+                props: {
+                    clipped: true,
+                    cornerRadius: 5,
+                    alignment: $widget.verticalAlignment.center
+                },
+                views: [{
                     type: "text",
-                    props: {
-                        text: date === -1 ? "" : date
-                    }
-                })
+                    props: Object.assign({
+                        text: text,
+                        font: $font(12),
+                        color: $color("primaryText"),
+                        background: $color("clear"),
+                        frame: {
+                            width: 16,
+                            height: 20,
+                            alignment: $widget.alignment.center
+                        },
+                        padding: $insets(0, 3, 0, 3)
+                    }, props)
+                }]
             }
         }
-        return {
-            type: "hgrid",
+
+        let calendar = calendarInfo.calendar
+        let days = []
+        for (let line of calendar) {
+            for (let date of line) {
+                let props = {}
+                // 当天会有红色背景
+                if (date.date === calendarInfo.date) {
+                    props = {
+                        color: $color("white"),
+                        background: $color("orange"),
+                    }
+                }
+                // 周六周天显示灰色
+                if (date.day === 0 || date.day === 6) {
+                    props = Object.assign(props, {
+                        color: $color("systemGray2"),
+                    })
+                }
+                days.push(template(date === -1 ? "" : String(date.date), props))
+            }
+        }
+        // 加入标题
+        let title = []
+        for (let i = 0; i < 7; i++) {
+            title.push(template(this.localizedWeek(i), {
+                color: $color("orange")
+            }))
+        }
+        return title.concat(days)
+    }
+
+    calendarView(ctx) {
+        let calendarInfo = this.getCalendar()
+        let calendar = {
+            type: "vgrid",
             props: {
-                rows: Array(5).fill({
+                columns: Array(7).fill({
                     flexible: {
-                        minimum: 1,
-                        maximum: 10
+                        minimum: 12,
+                        maximum: Infinity
                     },
-                    // spacing: 10,
-                    // alignment: $widget.alignment.left
+                    spacing: 0,
+                    alignment: $widget.alignment.center
                 }),
-                /* spacing: 10,
-                alignment: $widget.verticalAlignment.center */
+                padding: $insets(0, 5, 0, 5),
+                spacing: 0,
+                alignment: $widget.horizontalAlignment.center
             },
-            views: lines
+            views: this.formatCalendar(calendarInfo)
+        }
+        let titleBar = {
+            type: "hstack",
+            props: {
+                alignment: $widget.horizontalAlignment.center,
+                spacing: 20,
+                columns: Array(2).fill({
+                    flexible: {
+                        minimum: 10,
+                        maximum: Infinity
+                    }
+                })
+            },
+            views: [
+                {
+                    type: "text",
+                    props: {
+                        text: this.localizedMonth(calendarInfo.month),
+                        color: $color("orange"),
+                        font: $font("blur", 14),
+                        frame: {
+                            maxWidth: Infinity,
+                            width: 60,
+                            height: 20
+                        }
+                    }
+                },
+                {
+                    type: "spacer",
+                    props: {
+                        minLength: 10
+                    }
+                },
+                {
+                    type: "text",
+                    props: {
+                        text: String(calendarInfo.year),
+                        color: $color("orange"),
+                        font: $font("blur", 14),
+                        frame: {
+                            maxWidth: Infinity,
+                            width: 60,
+                            height: 20
+                        }
+                    }
+                }
+            ]
+        }
+        return {
+            type: "vstack",
+            props: {
+                alignment: $widget.verticalAlignment.center,
+                spacing: 0
+            },
+            views: [titleBar, calendar]
         }
     }
 

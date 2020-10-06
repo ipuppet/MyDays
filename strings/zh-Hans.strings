@@ -60,10 +60,24 @@
 "VERSION" = "Version";
 "AUTHOR" = "作者";
 
-"SUNDAY" = "星期天";
-"MONDAY" = "星期一";
-"TUESDAY" = "星期二";
-"WEDNESDAY" = "星期三";
-"THURSDAY" = "星期四";
-"FRIDAY" = "星期五";
-"SATURDAY" = "星期六";
+"SUNDAY" = "日";
+"MONDAY" = "一";
+"TUESDAY" = "二";
+"WEDNESDAY" = "三";
+"THURSDAY" = "四";
+"FRIDAY" = "五";
+"SATURDAY" = "六";
+
+"MONTH" = "月";
+"JANUARY" = "一";
+"FEBRUARY" = "二";
+"MARCH" = "三";
+"APRIL" = "四";
+"MAY" = "五";
+"JUNE" = "六";
+"JULY" = "七";
+"AUGUST" = "八";
+"SEPTEMBER" = "九";
+"OCTOBER" = "十";
+"NOVEMBER" = "十一";
+"DECEMBER" = "十二";
