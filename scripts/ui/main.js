@@ -21,8 +21,7 @@ class MainUI {
     render() {
         switch ($app.env) {
             case $env.app:
-                //this.mainUi()
-                this.widgetUi()
+                this.mainUi()
                 break
             case $env.keyboard:
                 $ui.alert("不要在键盘中使用。。。")

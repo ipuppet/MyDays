@@ -1,3 +1,5 @@
+const inputValue = $widget.inputValue
+
 class WidgetUI {
     constructor(kernel) {
         this.kernel = kernel
@@ -193,6 +195,7 @@ class WidgetUI {
     }
 
     render() {
+        console.log(inputValue)
         $widget.setTimeline({
             entries: [
                 {
@@ -204,7 +207,12 @@ class WidgetUI {
                 //afterDate: aDate
             },
             render: ctx => {
-                return this.calendarView(ctx)
+                switch (ctx.family) {
+                    case 0:
+                        return this.calendarView(ctx)
+                    case 1:
+                        return {}
+                }
             }
         })
     }
