@@ -1,14 +1,13 @@
-const Palette = require("/scripts/ui/components/palette")
-
 class ColorUI {
     constructor(kernel, factory) {
         this.kernel = kernel
         this.factory = factory
         this.width = $device.info.screen.width
-        this.palette = new Palette()
     }
 
     push(color = null, callback = null) {
+        // 每次都需要重新实例化
+        this.palette = new (this.kernel.getPlugin("palette").plugin)()
         let navButtons = [
             {
                 type: "button",
