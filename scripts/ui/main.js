@@ -13,10 +13,16 @@ class MainUI {
         new TodayUI(this.kernel).render()
     }
 
+    widgetUi() {
+        const WidgetUI = require("./widget/widget")
+        new WidgetUI(this.kernel).render()
+    }
+
     render() {
         switch ($app.env) {
             case $env.app:
-                this.mainUi()
+                //this.mainUi()
+                this.widgetUi()
                 break
             case $env.keyboard:
                 $ui.alert("不要在键盘中使用。。。")
