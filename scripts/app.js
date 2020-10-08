@@ -7,7 +7,7 @@ class AppKernel extends Kernel {
         super()
         // 注册组件
         this.settingComponent = this._registerComponent("Setting")
-        this.setting = this.settingComponent.controller.init()
+        this.setting = this.settingComponent.controller
         this.initSettingMethods()
         this.page = this._registerComponent("Page")
         this.menu = this._registerComponent("Menu")
